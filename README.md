@@ -5,7 +5,7 @@ Simply run
 
 ## Use user written functionality
 
-Clone this repository into your `ado/personal` folder and remember to pull changes frequently.
+Clone this repository into your `ado/` folder and remember to `pull` changes frequently (you may have to delete you `ado/personal` folder).
 You can find the location of your `ado/personal` folder by typing `sysdir`
 
 ## Contributions are welcome
