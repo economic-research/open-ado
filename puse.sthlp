@@ -8,7 +8,7 @@ help for {hi:puse}
 
 {p 8 16 2}{cmd:puse}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:clear} {cmdab:debug}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:clear} {cmdab:debug} {cmdab:original}]
 
 {p 4 4 2}
 where
@@ -21,6 +21,9 @@ where
 
 {p 8 16 2}
 {it:debug} prevents puse from using {cmdab:project} functionality.
+
+{p 8 16 2}
+{it:original} directs {cmdab:project} to treat datafile as original using the {cmdab: project , original(filename)} functionality.
 
 {title:Authors}
 
