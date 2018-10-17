@@ -15,20 +15,19 @@ version 14
 	
 	capture confirm file "`filedta'"
 	
-	if _rc ==0{
-		use "`filedta'" , `clear'
-		if "`debug'" == ""{
-			if "`original'" == ""{
-				project , uses("`filedta'") preserve
-				}
-			else{
-				project , original("`filedta'")
-				}
-			}
+	if _rc ==0{ //If DTA file exists read DTA file, otherwise read CSV
+		use "`filedta'" , `clear'	
 	} 
 	else {
-		import delimited using "`filecsv'", `clear' case(preserve)
-		if "`debug'" == ""{
+		import delimited using "`filecsv'", `clear' case(lower)
+	}
+	
+	*** CSV files are better for project functionality since they don't
+	*** store (as much) metadata
+	
+	capture confirm file "`filecsv'"
+	if _rc == 0{ // If  CSV file exists register project functionality using CSV
+		if "`debug'" == ""{ // If debug option wasn't set, use project functionality
 			if "`original'" == ""{
 				project , uses("`filecsv'") preserve
 				}
@@ -36,5 +35,15 @@ version 14
 				project , original("`filecsv")
 				}
 			}
-	}
+		}
+		else{ // IF CSV wasn't found, register project using DTA
+			if "`debug'" == ""{ // If debug option wasn't set, use project functionality
+			if "`original'" == ""{
+				project , uses("`filedta'") preserve
+				}
+			else{
+				project , original("`filedta'")
+				}
+			}
+		}		
 end
