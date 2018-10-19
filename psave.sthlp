@@ -14,7 +14,8 @@ help for {hi:psave}
 where
 
 {p 8 16 2}
-{it:file} stands for the route and name of the article {it:without} file extension. E.g., "../../Violencia Mexico/constructed/homicide". Note that the extension has experimental functionality that handles files extensions automatically.
+{it:file} stands for the route and name of the article {it:without} file extension. 
+Note that the extension has experimental functionality that handles files extensions automatically.
 
 {p 8 16 2}
 {it:eopts} refers to standard options of {cmdab:export delimited}.
@@ -23,7 +24,7 @@ where
 {it:preserve} avoids clearing local memory.
 
 {p 8 16 2}
-{it:debug} prevents psave from using {cmdab:project} functionality.
+{it:debug} prevents psave from using {cmdab:project} functionality. In debug mode {it: psave} will not save a CSV file.
 
 {title:Authors}
 
