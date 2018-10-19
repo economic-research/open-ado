@@ -18,9 +18,9 @@ version 14
 	// guarantees that the rows in the CSV are always ordered the same---
 	
 	save "`filedta'" , replace
-	export delimited using "`filecsv'", replace `eopts'
 	
 	if "`debug'" == ""{
+		export delimited using "`filecsv'", replace `eopts'
 		project, creates("`filecsv'") `preserve'
 	}
 end
