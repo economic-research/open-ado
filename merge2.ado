@@ -3,7 +3,7 @@ version 14
 	syntax varlist , type(string) file(string asis) ///
 		[datevar(varlist) tdate(string) ///
 		fdate(string) moptions(string)  ///
-		idstr(varlist) idnum(varlist) original]
+		idstr(varlist) idnum(varlist) original debug]
 		
 	tempfile masterfile usingfile
 		
@@ -13,12 +13,14 @@ version 14
 	capture destring `idnumeric' , replace
 	capture tostring `idstring' , replace
 	
-	if "`original'" == "" {
-		project, uses(`file') preserve	
+	if "`debug'" == ""{
+		if "`original'" == "" {
+			project, uses(`file') preserve	
+		}
+		else{
+			project, original(`file') preserve
+		}
 	}
-	else{
-		project, original(`file') preserve
-	}	
 	
 	if "`datevar'" != "" {
 		tempvar newdate
