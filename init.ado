@@ -16,4 +16,7 @@ version 14
      if "`trace'" == "trace"{ `limit'
           set trace on `limit'
      } `limit'
+     else { `limit'
+           set trace off `limit'
+          } `limit'
 end
