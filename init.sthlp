@@ -8,7 +8,7 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:init}
 {cmd:,} 
-[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} cmdab:debug}]
+[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} {cmdab:debug}]
 
 {p 4 4 2}
 where
