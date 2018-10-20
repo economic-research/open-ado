@@ -8,27 +8,24 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:init}
 {cmd:,} 
-[{cmdab:lor}{cmdab:trace}{cmdab:debug}]
-
-[, lor trace debug]
+[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} cmdab:debug}]
 
 {p 4 4 2}
 where
 
 {p 8 16 2}
-{it:lor} stands for {it:Lorenzo mode}. This adds {cmd:#delimit;} to the initialization. 
+{it:proj} use it to pass the name of the current project (uses {it:project} functionality). 
 
 {p 8 16 2}
-{it:trace} adds {cmdab:set trace on}. Default is {cmdab:set trace off}.
+{it:route} if {it:debug} is not set changes the directory to the one specified here.
 
 {p 8 16 2}
-{it:debug} adds {cmdab: global deb "deb"}.
+{it:debug} adds {cmdab: global deb "debug"}.
 
 {p 8 16 2}
 This ado file does the following:
 
 clear all
-macro drop _all 
 set more off
 set type double 
 
