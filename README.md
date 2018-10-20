@@ -18,3 +18,12 @@ Our base of ado files will improve the more people contribute to it. Please do c
 1. Create a separate branch with a descriptive name, e.g., `feature-count-missing`. *Do not commit to master*.
 2. `push` your changes into that branch
 3. Make a `pull` request to master
+
+## Directory of ados
+- _graph2_ exports a graph to PNG and PDF and optionally passes project functionality
+- _init_ starts a STATA dofile with commonly used options
+- _merge2_ merges to a CSV file, optionally passes project functionality
+- _missing2zero_ replaces missing values for a user specified value for a given list of variables
+- _psave_ saves to CSV and DTA and registers with project
+- _puse_ reads a DTA and, if it doesn't exist, tries to find a matching CSV file to read
+- _uniquevals_ counts the number of unique values for a list of variables
