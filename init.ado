@@ -1,22 +1,22 @@
 program define init , rclass
 version 14
     syntax [, lor trace debug]
-    if "`lor'" == "lor"{
+     
+     clear all
+     macro drop _all
+     set more off
+     
+     gl deb "`debug'"
+     set type double
+     
+     if "`trace'" == "trace"{
+          set trace on
+     }
+     else {
+           set trace off
+          }
+     
+     if "`lor'" == "lor"{
         # delimit;
-        local limit ";" ;
      } `limit'
-     
-     clear all `limit'
-     macro drop _all `limit'
-     set more off `limit'
-     
-     gl deb "`debug'" `limit'
-     set type double `limit'
-     
-     if "`trace'" == "trace"{ `limit'
-          set trace on `limit'
-     } `limit'
-     else { `limit'
-           set trace off `limit'
-          } `limit'
 end
