@@ -1,7 +1,7 @@
 program twowayscatter , rclass
 version 14
 	syntax varlist(min=2 max=3) ///
-	 [ ,  color1(string) color2(string) file(string asis) ///
+	 [ ,  color1(string) color2(string) file(string) ///
 	  conditions(string) debug]
 	
 	local k = 0
@@ -36,7 +36,8 @@ version 14
 		}
 	}
 	
+	set trace on
 	if "`file'" != ""{
-		graph2 , file(`file') `debug'
+		graph2 , file("`file'") `debug'
 	}
 end
