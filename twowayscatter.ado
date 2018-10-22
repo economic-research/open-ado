@@ -36,7 +36,6 @@ version 14
 		}
 	}
 	
-	set trace on
 	if "`file'" != ""{
 		graph2 , file("`file'") `debug'
 	}
