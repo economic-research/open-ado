@@ -6,7 +6,7 @@ help for {hi:twowayscatter}
 
 {title:twowayscatter - A module to plot scatterplots and display the correlation.}
 
-{p 8 16 2}{cmd:twowayscatter} {cmdab:varlist(min 2)}
+{p 8 16 2}{cmd:twowayscatter} {cmdab:varlist(min=2, max=3)}
 [{cmd:,} 
 {cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} 
 {cmdab:file(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
