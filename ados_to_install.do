@@ -7,3 +7,4 @@ ssc install ivreg2
 ssc install coefplot
 ssc install moreobs
 ssc install mdesc
+ssc install sutex
