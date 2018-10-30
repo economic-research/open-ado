@@ -32,7 +32,7 @@ version 14
 				project , uses("`filecsv'") preserve
 				}
 			else{
-				project , original("`filecsv'")
+				project , original("`filecsv'") preserve
 				}
 			}
 		}
@@ -42,7 +42,7 @@ version 14
 				project , uses("`filedta'") preserve
 				}
 			else{
-				project , original("`filedta'")
+				project , original("`filedta'") preserve
 				}
 			}
 		}		
