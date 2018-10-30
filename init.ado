@@ -1,9 +1,7 @@
 program define init , rclass
 version 14
-	clear all
-	
 	syntax [, proj(string) route(string) debug]
-	
+	clear all	
 	set more off
 
 	gl deb = "`debug'"
