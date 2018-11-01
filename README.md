@@ -23,6 +23,7 @@ Our base of ado files will improve the more people contribute to it. Please do c
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
 - **init** starts a STATA dofile with commonly used options
 - **merge2** merges to a CSV file, optionally passes project functionality
+- **mcompare** multi compares a list of variables to a base variable
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
 - **psave** saves to CSV and DTA and registers with project
 - **puse** reads a DTA and, if it doesn't exist, tries to find a matching CSV file to read
