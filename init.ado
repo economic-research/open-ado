@@ -1,7 +1,8 @@
 program define init , rclass
 version 14
-	syntax [, proj(string) route(string) debug]
-	clear all	
+	syntax [, proj(string) route(string) debug hard]
+	clear all
+	discard
 	set more off
 
 	gl deb = "`debug'"
@@ -14,5 +15,9 @@ version 14
 		if "`route'" != "" {
 			cd `route'
 		}
+	}
+	
+	if "`hard'" == "hard"{
+		macro drop _all
 	}
 end

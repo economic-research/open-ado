@@ -8,7 +8,7 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:init}
 {cmd:,} 
-[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} {cmdab:debug}]
+[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} {cmdab:debug} {cmdab:hard}]
 
 {p 4 4 2}
 where
@@ -23,9 +23,13 @@ where
 {it:debug} adds {cmdab: global deb "debug"}.
 
 {p 8 16 2}
+{it:hard} clears all macros --including globals.
+
+{p 8 16 2}
 This ado file does the following:
 
 clear all
+discard
 set more off
 set type double 
 
