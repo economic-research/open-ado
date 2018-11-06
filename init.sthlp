@@ -23,7 +23,7 @@ where
 {it:debug} adds {cmdab: global deb "debug"}.
 
 {p 8 16 2}
-{it:hard} clears all macros --including globals.
+{it:hard} clears all macros --including globals. {it:hard} overrides {it:debug}. 
 
 {p 8 16 2}
 This ado file does the following:
