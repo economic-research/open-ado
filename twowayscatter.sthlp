@@ -8,9 +8,8 @@ help for {hi:twowayscatter}
 
 {p 8 16 2}{cmd:twowayscatter} {cmdab:varlist(min=2, max=3)}
 [{cmd:,} 
-{cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} 
-{cmdab:file(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
-debug]
+{cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
+debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)}]
 
 {p 4 4 2}
 where
@@ -26,6 +25,12 @@ where
 
 {p 8 16 2}
 {it:debug} adds debug option to use within {it:project}.
+
+{p 8 16 2}
+{it:lfit} adds linear fit line for the first two variables.
+
+{p 8 16 2}
+{it:type} optionally specifies the type of plot one wants. Default is scatterplot. Any graph type supported by {it:twoway} is valid.
 
 {title:Author}
 
