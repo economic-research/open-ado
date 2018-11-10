@@ -15,6 +15,7 @@ version 14
 	tempvar ordervar
 	gen `ordervar' = runiform()
 	sort `ordervar'
+	drop `ordervar'
 	// guarantees that the rows in the CSV are always ordered the same---
 	
 	// compress to save information
