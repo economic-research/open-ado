@@ -11,11 +11,9 @@ version 14
 	if ("$deb" == "debug" & "`proj'" != "") {
 		project `proj' , cd
 	}
-	else{
-		if "`route'" != "" {
+	else if "`route'" != "" & "$deb" == ""{
 			cd `route'
 		}
-	}
 	
 	if "`hard'" == "hard"{
 		macro drop _all
