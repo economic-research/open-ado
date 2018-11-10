@@ -12,12 +12,18 @@ You can find the location of your `ado/personal` folder by typing `sysdir`. You 
 Seriously, we spent a lot of time coming with all those handy tricks
 
 ## Contributions are welcome
-Our base of ado files will improve the more people contribute to it. Please do contribute as follows:
+Our base of ado files will improve the more people contribute to it. There are two ways to contribute:
 
-## Commit
-1. Create a separate branch with a descriptive name, e.g., `feature-count-missing`. *Do not commit to master*.
-2. `push` your changes into that branch
-3. Make a `pull` request to master
+### Ask to join the repository as editor
+1. Send an email to jose_jurado_vadillo@brown.edu asking to join the repository as editor. Please provide your GitHub user mail and username.
+2. Create a separate branch with a descriptive name, e.g., `feature-count-missing`. *You will not be able to commit to master*.
+3. `push` your changes into that branch
+4. Make a `pull` request to master
+
+### Fork the repository, introduce your changes and make a pull request from your fork to this repository
+1. `Fork` the repository into your account.
+2. Follow steps 2-4 in previous section
+3. Send a pool request from your fork to our repository
 
 ## Directory of ados
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
