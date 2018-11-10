@@ -7,5 +7,6 @@ ssc install mmerge
 ssc install moreobs
 ssc install ivreg2
 ssc install project
+ssc install grqreg
 ssc install ranktest
 ssc install sutex
