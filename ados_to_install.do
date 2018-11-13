@@ -1,3 +1,4 @@
+ssc install cdfplot
 ssc install coefplot
 ssc install estout
 ssc install eventstudy2
