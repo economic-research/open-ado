@@ -4,12 +4,13 @@
 help for {hi:twowayscatter}
 {hline}
 
-{title:twowayscatter - A module to plot scatterplots and display the correlation.}
+{title:twowayscatter - A module to plot scatterplots and display a correlation.}
 
 {p 8 16 2}{cmd:twowayscatter} {cmdab:varlist(min=2, max=3)}
 [{cmd:,} 
 {cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
-debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)}]
+debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)} 
+ncorr singleaxis]
 
 {p 4 4 2}
 where
@@ -31,6 +32,12 @@ where
 
 {p 8 16 2}
 {it:type} optionally specifies the type of plot one wants. Default is scatterplot. Any graph type supported by {it:twoway} is valid.
+
+{p 8 16 2}
+{it:ncorr} Omitts correlation coefficient and legend.
+
+{p 8 16 2}
+{it:singleaxis} If three variables are specified, {it:singleaxis} plots both of them against the same y-axis.
 
 {title:Author}
 
