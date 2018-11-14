@@ -8,7 +8,8 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:init}
 {cmd:,} 
-[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} {cmdab:debug} {cmdab:hard}]
+[{cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)} {cmdab:debug} {cmdab:hard}
+{cmdab:omit}]
 
 {p 4 4 2}
 where
@@ -24,6 +25,9 @@ where
 
 {p 8 16 2}
 {it:hard} clears all macros --including globals. {it:hard} overrides {it:debug}. 
+
+{p 8 16 2}
+{it:omit} skips creation of graphs when used in conjunction with twowayscatter. 
 
 {p 8 16 2}
 This ado file does the following:

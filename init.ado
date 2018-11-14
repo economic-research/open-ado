@@ -1,11 +1,13 @@
 program define init , rclass
 version 14
-	syntax [, proj(string) route(string) debug hard]
+	syntax [, proj(string) route(string) debug hard omit]
 	clear all
 	discard
 	set more off
 
 	gl deb = "`debug'"
+	gl omit = "`omit'"
+	
 	set type double
 	
 	if ("$deb" == "debug" & "`proj'" != "") {
