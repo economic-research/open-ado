@@ -10,7 +10,7 @@ help for {hi:twowayscatter}
 [{cmd:,} 
 {cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
 debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)} 
-ncorr singleaxis]
+ncorr singleaxis omit]
 
 {p 4 4 2}
 where
@@ -38,6 +38,9 @@ where
 
 {p 8 16 2}
 {it:singleaxis} If three variables are specified, {it:singleaxis} plots both of them against the same y-axis.
+
+{p 8 16 2}
+{it:omit} If selected, graph will not be rendered or saved. Useful when one doesn't want to keep producing the same graph across multiple compiles.
 
 {title:Author}
 
