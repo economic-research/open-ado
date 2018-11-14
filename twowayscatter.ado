@@ -3,7 +3,12 @@ version 14
 	syntax varlist(min=2 max=3) ///
 	 [ ,  color1(string) color2(string) conditions(string) ///
 		debug file(string) lfit ///
-	    type1(string) type2(string) ncorr singleaxis]
+	    type1(string) type2(string) ncorr singleaxis omit]
+	
+	if "`omit'" == "omit"{
+		di "Graph skipped: `file'"
+		exit
+	}
 	
 	if "`type1'" == ""{
 		local type1 "scatter"
