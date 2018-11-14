@@ -10,9 +10,7 @@ version 14
 	
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
-	
-	//project, uses("`filecsv'")
-	
+		
 	capture confirm file "`filedta'"
 	
 	if _rc ==0{ //If DTA file exists read DTA file, otherwise read CSV
