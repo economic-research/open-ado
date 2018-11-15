@@ -33,5 +33,6 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
 - **psave** saves to CSV and DTA and registers with project
 - **puse** reads a DTA and, if it doesn't exist, tries to find a matching CSV file to read
+- **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
 - **twowayscatter** plots one or two-way scatters and saves the results 
 - **uniquevals** counts the number of unique values for a list of variables
