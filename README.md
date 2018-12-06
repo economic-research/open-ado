@@ -23,7 +23,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 ### Fork the repository, introduce your changes and make a pull request from your fork to this repository
 1. `Fork` the repository into your account.
 2. Follow steps 2-4 in previous section
-3. Send a `pull` request from your fork to our repository
+3. Send a `pull` request from your fork to our repository (see [this](https://www.youtube.com/watch?v=G9yBPk4SltE))
 
 ## Directory of ados
 - **date2string** generates a new date variable in string format
