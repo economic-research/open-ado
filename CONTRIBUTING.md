@@ -7,7 +7,11 @@ Our base of ado files will improve the more people contribute to it. There are t
 3. `push` your changes into that branch
 4. Make a `pull` request to master
 
-### Fork the repository, introduce your changes and make a pull request from your fork to this repository
-1. `Fork` the repository into your account.
-2. Follow steps 2-4 in previous section
-3. Send a `pull` request from your fork to our repository
+### Forking the repository
+1. `fork` the repository into your account.
+2. `clone`
+3. Introduce your changes and `commit`
+4. `push` to your `fork`
+5. Send a `pull` request
+
+(for more info see [this](https://www.youtube.com/watch?v=G9yBPk4SltE))
