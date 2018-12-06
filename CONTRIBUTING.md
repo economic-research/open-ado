@@ -14,4 +14,4 @@ Our base of ado files will improve the more people contribute to it. There are t
 4. `push` to your `fork`
 5. Send a `pull` request
 
-(for more info see [this](https://www.youtube.com/watch?v=G9yBPk4SltE))
+(for more info watch [this](https://www.youtube.com/watch?v=G9yBPk4SltE))
