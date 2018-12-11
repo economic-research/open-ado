@@ -1,6 +1,6 @@
 program define psave , rclass
 version 14
-	syntax , file(string asis) [preserve eopts(string) debug com]
+	syntax , file(string asis) [preserve eopts(string) debug com norand]
 	
 	// Drops CSV file extension if any is present
 	local newfile = subinstr(`file', ".csv", "", .)
@@ -9,14 +9,16 @@ version 14
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
 	
-	// guarantees that the rows in the CSV are always ordered the same---
-	set seed 13237 // from random.org
-	
-	tempvar ordervar
-	gen `ordervar' = runiform()
-	sort `ordervar'
-	drop `ordervar'
-	// guarantees that the rows in the CSV are always ordered the same---
+	if "`norand'" != "norand"{
+		// guarantees that the rows in the CSV are always ordered the same---
+		set seed 13237 // from random.org
+		
+		tempvar ordervar
+		gen `ordervar' = runiform()
+		sort `ordervar'
+		drop `ordervar'
+		// guarantees that the rows in the CSV are always ordered the same---
+	}
 	
 	// compress to save information
 	qui count
