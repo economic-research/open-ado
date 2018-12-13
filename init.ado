@@ -1,6 +1,6 @@
 program define init , rclass
 version 14
-	syntax [, proj(string) route(string) debug hard omit]
+	syntax [, debroute(string) debug hard proj(string) route(string) omit]
 	clear all
 	discard
 	set more off
@@ -10,8 +10,11 @@ version 14
 	
 	set type double
 	
-	if ("$deb" == "debug" & "`proj'" != "") {
+	if ("$deb" == "debug" & "`proj'" != "") { // In debug mode change to route if specified
 		project `proj' , cd
+		if "`debroute'" != ""{ // If debroute specified change WD with respect to root directory
+			cd `debroute'
+		}
 	}
 	else if "`route'" != "" & "$deb" == ""{
 			cd `route'
