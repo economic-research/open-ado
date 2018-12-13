@@ -7,7 +7,7 @@ ssc install mdesc
 ssc install mmerge
 ssc install moreobs
 ssc install ivreg2
-scc install palettes
+ssc install palettes
 ssc install project
 ssc install grqreg
 ssc install ranktest
