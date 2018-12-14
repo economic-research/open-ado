@@ -31,6 +31,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 
 ## Directory of ados
 - **date2string** generates a new date variable in string format
+- **esttab2** wrapper for esttab with commonly used options and project functionality
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
 - **init** starts a STATA dofile with commonly used options
 - **merge2** merges to a CSV file, optionally passes project functionality
