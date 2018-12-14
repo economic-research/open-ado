@@ -1,6 +1,6 @@
 program define init , rclass
 version 14
-	syntax [, debroute(string) debug hard proj(string) route(string) omit]
+	syntax [, debroute(string) debug hard omit proj(string) route(string)]
 	clear all
 	discard
 	set more off
