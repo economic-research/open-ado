@@ -2,6 +2,7 @@ ssc install cdfplot
 ssc install coefplot
 ssc install estout
 ssc install eventstudy2
+ssc install latab
 ssc install mat2txt
 ssc install mdesc
 ssc install mmerge

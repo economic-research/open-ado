@@ -37,6 +37,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **merge2** merges to a CSV file, optionally passes project functionality
 - **mcompare** multi compares a list of variables to a base variable
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
+- **polgenerate** generates polynomials out of a varlist and labels them
 - **psave** saves to CSV and DTA and registers with project
 - **puse** reads a DTA and, if it doesn't exist, tries to find a matching CSV file to read
 - **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
