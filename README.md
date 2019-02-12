@@ -43,3 +43,4 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
 - **twowayscatter** plots one or two-way scatters and saves the results 
 - **uniquevals** counts the number of unique values for a list of variables
+- **values2ascii** converts some UTF-8 into ASCII
