@@ -8,7 +8,7 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:init}
 {cmd:,} 
-[{cmdab:debroute(}{it:string}{cmd:)} {cmdab:debug} {cmdab:hard} {cmdab:omit}
+[{cmdab:debroute(}{it:string}{cmd:)} {cmdab:debug} {cmdab:double} {cmdab:hard} {cmdab:omit}
 {cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)}]
 
 {p 4 4 2}
@@ -20,6 +20,9 @@ where
 
 {p 8 16 2}
 {it:debug} adds {cmdab: global deb "debug"}.
+
+{p 8 16 2}
+{it:double} adds type double option to STATA.
 
 {p 8 16 2}
 {it:hard} clears all macros --including globals. {it:hard} overrides {it:debug}. 
@@ -39,7 +42,6 @@ This ado file does the following:
 clear all
 discard
 set more off
-set type double 
 
 {title:Author}
 
