@@ -1,0 +1,35 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}plog_1
+       {txt}log:  {res}/home/andres/ado/personal/open-ado/examples/example.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}24 Feb 2019, 13:56:51
+{txt}
+{com}. /*
+>         This dofile showcases what our ado files can do in a production environment.
+>         Please note that examples here don't cover all the capabilities supported.
+>         
+>         Install first `project` with `ssc install project`
+>         Point to this masterdofile with:
+>         
+>         `project , setup`
+>         
+>         Build project with:
+>         `project example , build`
+> */
+. 
+. project , do("source/auto-analysis.do")
+{txt}project example > do-file uses original: {res}"source/auto-analysis.do" filesig(1946267292:1005){txt}
+{smcl}
+{txt}{sf}{ul off}{smcl}
+{txt}{sf}{ul off}project example > do-file creates: {res}"source/auto-analysis.smcl" filesig(193365646:5939){txt}
+
+{com}. 
+{txt}end of do-file
+      name:  {res}plog_1
+       {txt}log:  {res}/home/andres/ado/personal/open-ado/examples/example.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}24 Feb 2019, 13:56:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
