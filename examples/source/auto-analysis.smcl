@@ -1,0 +1,138 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}plog_2
+       {txt}log:  {res}/home/andres/ado/personal/open-ado/examples/source/auto-analysis.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}24 Feb 2019, 13:56:51
+{txt}
+{com}. init , hard
+{txt}
+{com}. init , proj(example) route("..") // add `debug` to run in debug mode!. 
+{res}/home/andres/ado/personal/open-ado/examples
+{txt}
+{com}.                                 // Note that `project` automatically switches WD to current dofile, route() points back to the original root folder
+. 
+. program main
+{txt}  1{com}.         sysuse auto
+{txt}  2{com}.         
+.         check_data
+{txt}  3{com}.         make_graphs
+{txt}  4{com}.         explore_data
+{txt}  5{com}. end
+{txt}
+{com}. 
+. program check_data
+{txt}  1{com}.         // Count missing values jointly for 3 variables
+.         mcompare make foreign rep78 
+{txt}  2{com}.         
+.         // Replace missing values with zeros in rep78
+.         missing2zero rep78
+{txt}  3{com}. end
+{txt}
+{com}. 
+. program make_graphs
+{txt}  1{com}.         // Plot prices, mpg of cars and weight in a scatter
+.         twowayscatter price mpg weight , $deb ///
+>                 file("./publishables/figures/prices_mpgs_weight")
+{txt}  2{com}.                 
+.                 
+.         // We can also use normal STATA graphs with project functionality
+.         histogram price
+{txt}  3{com}.         graph2 , file("./publishables/figures/hist_price") $deb
+{txt}  4{com}.         
+. end
+{txt}
+{com}. 
+. program explore_data
+{txt}  1{com}.         // Tabulate 2 variables according to the values of a third (foreign)
+.         sumby make gear_ratio , by(foreign)
+{txt}  2{com}.         
+.         // Count number of distinct values for 3 variables
+.         uniquevals make gear_ratio foreign
+{txt}  3{com}. end
+{txt}
+{com}. 
+. main
+{txt}(1978 Automobile Data)
+
+{col 29}count
+{hline 33}
+jointly defined         {res}       74
+{txt}{col 24}{hline 10}
+total                   {res}       74
+
+{txt}{col 29}count
+{hline 33}
+jointly defined         {res}       69
+{txt}rep78 missing only      {res}        5
+{txt}{col 24}{hline 10}
+total                   {res}       74
+{txt}(5 real changes made)
+{res}{txt}(file ./publishables/figures/prices_mpgs_weight.png written in PNG format)
+(file ./publishables/figures/prices_mpgs_weight.pdf written in PDF format)
+project example > do-file creates: {res}"publishables/figures/prices_mpgs_weight.png" filesig(1589573245:26455){txt}
+(bin={res}8{txt}, start={res}3291{txt}, width={res}1576.875{txt})
+{res}{txt}(file ./publishables/figures/hist_price.png written in PNG format)
+(file ./publishables/figures/hist_price.pdf written in PDF format)
+project example > do-file creates: {res}"publishables/figures/hist_price.png" filesig(4044811650:15889){txt}
+foreign == 0:
+
+    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}make {c |}{res}          0
+{txt}{space 7}price {c |}{res}         52    6072.423    3097.104       3291      15906
+{txt}{space 9}mpg {c |}{res}         52    19.82692    4.743297         12         34
+{txt}{space 7}rep78 {c |}{res}         52    2.788462    1.143379          0          5
+{txt}{space 4}headroom {c |}{res}         52    3.153846    .9157578        1.5          5
+{txt}{hline 13}{c +}{hline 57}
+{space 7}trunk {c |}{res}         52       14.75    4.306288          7         23
+{txt}{space 6}weight {c |}{res}         52    3317.115    695.3637       1800       4840
+{txt}{space 6}length {c |}{res}         52    196.1346    20.04605        147        233
+{txt}{space 8}turn {c |}{res}         52    41.44231    3.967582         31         51
+{txt}displacement {c |}{res}         52    233.7115    85.26299         86        425
+{txt}{hline 13}{c +}{hline 57}
+{space 2}gear_ratio {c |}{res}         52    2.806538    .3359556       2.19       3.58
+{txt}{space 5}foreign {c |}{res}         52           0           0          0          0
+foreign == 1:
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 8}make {c |}{res}          0
+{txt}{space 7}price {c |}{res}         22    6384.682    2621.915       3748      12990
+{txt}{space 9}mpg {c |}{res}         22    24.77273    6.611187         14         41
+{txt}{space 7}rep78 {c |}{res}         22    4.090909    1.150945          0          5
+{txt}{space 4}headroom {c |}{res}         22    2.613636    .4862837        1.5        3.5
+{txt}{hline 13}{c +}{hline 57}
+{space 7}trunk {c |}{res}         22    11.40909    3.216906          5         16
+{txt}{space 6}weight {c |}{res}         22    2315.909    433.0035       1760       3420
+{txt}{space 6}length {c |}{res}         22    168.5455    13.68255        142        193
+{txt}{space 8}turn {c |}{res}         22    35.40909    1.501082         32         38
+{txt}displacement {c |}{res}         22    111.2273    24.88054         79        163
+{txt}{hline 13}{c +}{hline 57}
+{space 2}gear_ratio {c |}{res}         22    3.507273    .2969076       2.98       3.89
+{txt}{space 5}foreign {c |}{res}         22           1           0          1          1
+foreign == 0:
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}gear_ratio {c |}{res}         52    2.806538    .3359556       2.19       3.58
+foreign == 1:
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 2}gear_ratio {c |}{res}         22    3.507273    .2969076       2.98       3.89
+make has 74 distinct values
+gear_ratio has 36 distinct values
+foreign has 2 distinct values
+{txt}
+{com}. 
+. exit
+
+{txt}end of do-file
+      name:  {res}plog_2
+       {txt}log:  {res}/home/andres/ado/personal/open-ado/examples/source/auto-analysis.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}24 Feb 2019, 13:56:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
