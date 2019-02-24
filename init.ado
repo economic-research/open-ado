@@ -1,6 +1,5 @@
 program define init , rclass
-version 14
-	syntax [, debroute(string) debug hard omit proj(string) route(string)]
+	syntax [, debroute(string) debug double hard omit proj(string) route(string)]
 	clear all
 	discard
 	set more off
@@ -8,7 +7,9 @@ version 14
 	gl deb = "`debug'"
 	gl omit = "`omit'"
 	
-	set type double
+	if "`double'" == "double"{ 
+		set type double
+	}
 	
 	if ("$deb" == "debug" & "`proj'" != "") { // In debug mode change to route if specified
 		project `proj' , cd

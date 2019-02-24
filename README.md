@@ -12,7 +12,7 @@ You can find the location of your `ado/personal` folder by typing `sysdir`. You 
 Seriously, we spent a lot of time coming with all those handy tricks
 
 ## Check out our examples
-We have written basic examples under `./example` that illustrate what you can do with `project` and the functionality that we support.
+We have written basic examples under `./examples/` that illustrate what you can do with `project` and the functionality that we support.
 
 ## Contributions are welcome
 Our base of ado files will improve the more people contribute to it. There are two ways to contribute:
