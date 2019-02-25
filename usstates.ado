@@ -116,7 +116,7 @@ syntax varlist(min=1 max=1) , newvar(string) type(string)
 		qui replace `newvar' = "Washington" if `var' == "WA"
 		qui replace `newvar' = "Wisconsin" if `var' == "WI"
 		qui replace `newvar' = "West Virginia" if `var' == "WV"
-		qui replace `newvar' = "Wyoming" if `var' == "WV"
+		qui replace `newvar' = "Wyoming" if `var' == "WY"
 	}
 
 
