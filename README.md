@@ -1,8 +1,9 @@
 ## Why we created this repo
-Two reasons:
+Three reasons:
 
 1. Share useful ado files
-2. Implement `project` functionality (`project` is an ado file that you can install with `ssc install project`. This is covered in our Wiki, but the general idea is that it allows you to use relatives paths, detect bugs in your code more easily and avoid compiling dofiles when there's no need to).
+2. Give a down-to-earth, practical how-to on git. As we worked with more people (some of whom weren't already using git), providing material and going over aspects of git became burdersome. So we created a unified repository with a _lot_ of material on git!
+3. Implement `project` functionality (`project` is an ado file that you can install with `ssc install project`. This is covered in our Wiki, but the general idea is that it allows you to use relatives paths, detect bugs in your code more easily and avoid compiling dofiles when there's no need to). 
 
 We realized that while `project` is extremely useful, using it forced us to write a bunch of extra code and modify it on the fly if we wanted to compile a single dofile, as oppossed as an entire project. Thus, we wrote a bunch of dofiles that make using `project` as painless as possible. Instead of using `clear` you can use our functionality `init`, as oppossed to `save filename` you use `psave , file(filename)`, etc. That's it! This might seem a bit esoteric at first, so we encourage you to read the rest of the documentation and check our examples.
 
