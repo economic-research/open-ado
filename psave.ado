@@ -1,10 +1,9 @@
 program define psave , rclass
-version 14
 	syntax , file(string asis) [preserve eopts(string) debug com norand]
 	
-	// Drops CSV file extension if any is present
+	// Drops CSV, DTA file extensions if any are present
 	local newfile = subinstr(`file', ".csv", "", .)
-	local newfile = subinstr(`file', ".dta", "", .)
+	local newfile = subinstr("`newfile'", ".dta", "", .)
 	
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
