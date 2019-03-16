@@ -1,5 +1,5 @@
 program define psave , rclass
-	syntax , file(string asis) [preserve eopts(string) debug com norand]
+	syntax , file(string asis) [preserve eopts(string) debug com randnone]
 	
 	// Drops CSV, DTA file extensions if any are present
 	local newfile = subinstr(`file', ".csv", "", .)
@@ -8,7 +8,7 @@ program define psave , rclass
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
 	
-	if "`norand'" != "norand"{
+	if "`randnone'" != "randnone"{
 		// guarantees that the rows in the CSV are always ordered the same---
 		set seed 13237 // from random.org
 		
