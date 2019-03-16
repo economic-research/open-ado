@@ -8,7 +8,7 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:psave}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:eopts:(}{it:string}{cmd:)} {cmdab:preserve} {cmdab:debug} {cmdab:com} {cmdab:norand}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:eopts:(}{it:string}{cmd:)} {cmdab:preserve} {cmdab:debug} {cmdab:com} {cmdab:randnone}]
 
 {p 4 4 2}
 where
@@ -26,7 +26,7 @@ where
 {it:com} compresses the database to save space without losing precission. Regardless of user input {it:psave} will perform that operation if there are more than 1 million observations.
 
 {p 8 16 2}
-{it:norand} By default {it:psave} stores data using a fixed seed. The user can turn off this functionality by specifying {it:norand}, that forces {it:psave} to store data as is.
+{it:randnone} By default {it:psave} stores data using a fixed seed. The user can turn off this functionality by specifying {it:randnone}, that forces {it:psave} to store data as is.
 
 {title:Authors}
 
