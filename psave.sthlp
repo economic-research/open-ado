@@ -8,7 +8,8 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:psave}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:eopts:(}{it:string}{cmd:)} {cmdab:preserve} {cmdab:debug} {cmdab:com} {cmdab:randnone}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:eopts:(}{it:string}{cmd:)} {cmdab:preserve} {cmdab:debug} 
+{cmdab:com} {cmdab:randnone} {cmdab:csvnone}]
 
 {p 4 4 2}
 where
@@ -27,6 +28,9 @@ where
 
 {p 8 16 2}
 {it:randnone} By default {it:psave} stores data using a fixed seed. The user can turn off this functionality by specifying {it:randnone}, that forces {it:psave} to store data as is.
+
+{p 8 16 2}
+{it:csvnone} Don't store results in CSV format. If debug mode isn't specified will register DTA with project.
 
 {title:Authors}
 
