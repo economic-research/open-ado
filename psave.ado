@@ -1,5 +1,5 @@
 program define psave , rclass
-	syntax , file(string asis) [preserve eopts(string) debug com randnone]
+	syntax , file(string asis) [com csvnone debug eopts(string) preserve  randnone]
 	
 	// Drops CSV, DTA file extensions if any are present
 	local newfile = subinstr(`file', ".csv", "", .)
@@ -27,8 +27,12 @@ program define psave , rclass
 	
 	save "`filedta'" , replace
 	
-	if "`debug'" == ""{
+	if "`debug'" == "" & "`csvnone'" == ""{
 		export delimited using "`filecsv'", replace `eopts'
 		project, creates("`filecsv'") `preserve'
+	}
+
+	if "`debug'" == "" & "`csvnone'" == "csvnone"{
+		project , creates("`filedta'") `preserve'
 	}
 end
