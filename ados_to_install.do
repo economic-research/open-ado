@@ -1,4 +1,5 @@
 ssc install cdfplot
+ssc install carryforward
 ssc install coefplot
 ssc install estout
 ssc install eventstudy2
@@ -12,4 +13,5 @@ ssc install palettes
 ssc install project
 ssc install grqreg
 ssc install ranktest
+ssc install reghdfe
 ssc install sutex

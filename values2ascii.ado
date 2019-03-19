@@ -40,4 +40,11 @@ program define values2ascii , rclass
 			qui replace `var' = subinstr(`var',"-","",.)
 		}
 	}
+	
+	// 4. Eliminate spaces
+	foreach var in `varlist'{
+		qui replace `var' = subinstr(`var', char(10),"",.)
+
+	}
+	
 end
