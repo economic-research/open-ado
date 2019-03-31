@@ -1,9 +1,8 @@
 program define init , rclass
-	syntax [, debroute(string) debug double hard omit proj(string) route(string)]
+	syntax [, debug debroute(string) double hard omit proj(string) route(string)]
 	clear all
 	discard
-	set more off
-
+	
 	gl deb = "`debug'"
 	gl omit = "`omit'"
 	

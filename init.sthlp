@@ -7,19 +7,19 @@ help for {hi:psave}
 {title:init} - A module to initialize STATA dofiles.
 
 {p 8 16 2}{cmd:init}
-{cmd:,} 
-[{cmdab:debroute(}{it:string}{cmd:)} {cmdab:debug} {cmdab:double} {cmdab:hard} {cmdab:omit}
+[{cmd:,} 
+{cmdab:debug} {cmdab:debroute(}{it:string}{cmd:)} {cmdab:double} {cmdab:hard} {cmdab:omit}
 {cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)}]
 
 {p 4 4 2}
 where
 
 {p 8 16 2}
-{it:debroute} If specified and {it:debug} selected, changes working directory with respect to
-	{it:project} root directory.
+{it:debug} adds {cmdab: global deb "debug"}.
 
 {p 8 16 2}
-{it:debug} adds {cmdab: global deb "debug"}.
+{it:debroute} If specified and {it:debug} selected, changes working directory with respect to
+	{it:project} root directory.
 
 {p 8 16 2}
 {it:double} adds type double option to STATA.
@@ -41,7 +41,6 @@ This ado file does the following:
 
 clear all
 discard
-set more off
 
 {title:Author}
 
