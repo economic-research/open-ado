@@ -35,9 +35,9 @@ program define puse, rclass
 		}
 		else{ // IF CSV wasn't found, register project using DTA
 			if "`debug'" == ""{ // If debug option wasn't set, use project functionality
-			if "`original'" == ""{
-				project , uses("`filedta'") preserve
-				}
+				if "`original'" == ""{
+					project , uses("`filedta'") preserve
+					}
 			else{
 				project , original("`filedta'") preserve
 				}
