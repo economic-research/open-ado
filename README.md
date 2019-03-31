@@ -46,6 +46,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **esttab2** wrapper for esttab with commonly used options and project functionality
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
 - **init** starts a STATA dofile with commonly used options
+- **isorder** tells user if one or more variables describe order of dataset
 - **merge2** merges to a CSV file, optionally passes project functionality
 - **mcompare** multi compares a list of variables to a base variable
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
