@@ -4,11 +4,12 @@
 help for {hi:puse}
 {hline}
 
-{title:puse - A module that reads to DTA (and CSV if a DTA is not found) and documents dependencies.}
+{title:puse} - A module that reads to DTA (and CSV if a DTA is not found)
+ and documents dependencies.
 
 {p 8 16 2}{cmd:puse}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:clear} {cmdab:debug} {cmdab:original}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:clear} {cmdab:debug} {cmdab:opts:(}{it:string}{cmd:)}  {cmdab:original}]
 
 {p 4 4 2}
 where
@@ -18,6 +19,9 @@ where
 
 {p 8 16 2}
 {it:debug} prevents puse from using {cmdab:project} functionality.
+
+{p 8 16 2}
+{it:opts} insheet options.
 
 {p 8 16 2}
 {it:original} directs {cmdab:project} to treat datafile as original using the {cmdab: project , original(filename)} functionality.

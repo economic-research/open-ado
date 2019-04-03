@@ -1,7 +1,7 @@
 program define puse, rclass
 	// Registers CSV as using with project.
 	// Tries to load DTA file if it exists, if it doesn't it loads a CSV file
-	syntax, file(string asis) [clear debug original]
+	syntax, file(string asis) [clear debug opts(string) original]
 	
 	// Drops CSV file extension if any is present
 	local newfile = subinstr(`file', ".csv", "", .)
@@ -16,7 +16,8 @@ program define puse, rclass
 		use "`filedta'" , `clear'	
 	} 
 	else {
-		import delimited using "`filecsv'", `clear' case(lower)
+		import delimited using "`filecsv'", ///
+		`clear' case(lower) `opts'
 	}
 	
 	*** CSV files are better for project functionality since they don't
