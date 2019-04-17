@@ -1,5 +1,5 @@
 program define init , rclass
-	syntax [, debug debroute(string) double hard omit proj(string) route(string)]
+	syntax [, debug debroute(string) double hard logfile(string) omit proj(string) route(string)]
 	clear all
 	discard
 	
@@ -19,6 +19,11 @@ program define init , rclass
 	else if "`route'" != "" & "$deb" == ""{
 			cd `route'
 		}
+	
+	// If log option set and not in debug mode open logile
+	if ("$deb" == "" & "`logfile'" != "") {
+		log using "`logfile'" , replace
+	}
 	
 	if "`hard'" == "hard"{
 		macro drop _all
