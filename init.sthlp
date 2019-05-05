@@ -9,7 +9,7 @@ help for {hi:psave}
 {p 8 16 2}{cmd:init}
 [{cmd:,} 
 {cmdab:debug} {cmdab:debroute(}{it:string}{cmd:)} {cmdab:double} {cmdab:hard} 
-{cmdab:logfile(}{it:string}{cmd:)} {cmdab:omit}
+{cmdab:ignorefold} {cmdab:logfile(}{it:string}{cmd:)} {cmdab:omit}
 {cmdab:proj(}{it:string}{cmd:)} {cmdab:route(}{it:string}{cmd:)}]
 
 {p 4 4 2}
@@ -27,6 +27,9 @@ where
 
 {p 8 16 2}
 {it:hard} clears all macros --including globals. {it:hard} overrides {it:debug}. 
+
+{p 8 16 2}
+{it:ignorefold} If option is not selected init checks whether log folder exists in root directory, and stores logfile there. 
 
 {p 8 16 2}
 {it:logfile} opens a logfile if {it:debug} is not specified. Tip: {it:pexit} ado file closes all open logfiles.
