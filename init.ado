@@ -24,7 +24,9 @@ program define init , rclass
 	if ("$deb" == "" & "`logfile'" != "") {
 		capture confirm file "./log/" //check if a log directory exists
 		// If directory exists, but wasn't specified by user, then store logfile there
-		if _rc == 0 & strpos("`logfile'", "log/") == 0 & "`ignorefold'" == ""{ 
+		local LogFolderSpecified = strpos("`logfile'", "log/") + strpos("`logfile'", "log\")
+		
+		if _rc == 0 & `LogFolderSpecified' == 0 & "`ignorefold'" == ""{ 
 			local logfile = "./log/" + "`logfile'"
 		}
 		
