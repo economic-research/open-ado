@@ -8,6 +8,15 @@ program define psave , rclass
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
 	
+	// If csvnone is selected, check that CSV file doesn't exist
+	if "`csvnone'" == "csvnone"{
+		capture confirm file "`filecsv'"
+		if _rc ==0{ //If CSV file exists throw exception
+			di "CSV file already exists. Consider deleting it or avoiding option csvnone."
+			break
+		} 
+	}
+	
 	if "`randnone'" != "randnone"{
 		// guarantees that the rows in the CSV are always ordered the same---
 		set seed 13237 // from random.org
