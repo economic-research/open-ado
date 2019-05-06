@@ -17,15 +17,10 @@ program define psave , rclass
 		} 
 	}
 	
-	if "`randnone'" != "randnone"{
-		// guarantees that the rows in the CSV are always ordered the same---
-		set seed 13237 // from random.org
-		
-		tempvar ordervar
-		gen `ordervar' = runiform()
-		sort `ordervar'
-		drop `ordervar'
-		// guarantees that the rows in the CSV are always ordered the same---
+	if "`randnone'" == "randnone"{
+		di "Option randnone has been deprecated."
+		di "psave does not shuffle data by default."
+		di "Consider omitting this argument."
 	}
 	
 	// compress to save information
