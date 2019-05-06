@@ -1,4 +1,7 @@
 program define init , rclass
+	version 14
+	
+	capture macro drop debug
 	syntax [, debug debroute(string) double hard ignorefold logfile(string) omit proj(string) route(string)]
 	clear all
 	discard
