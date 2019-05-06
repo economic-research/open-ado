@@ -53,7 +53,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **pexit** closes open log files, generates summary stats for verification purposes and stops dofile
 - **polgenerate** generates polynomials out of a varlist and labels them
 - **psave** saves to CSV and DTA and registers with project
-- **puse** reads a DTA and, if it doesn't exist, tries to find a matching CSV file to read
+- **puse** reads a DTA's, CSV and Excel files, and register dependencies using project functionality.
 - **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
 - **twowayscatter** plots one or two-way scatters and saves the results 
 - **uniquevals** counts the number of unique values for a list of variables

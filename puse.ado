@@ -1,30 +1,84 @@
 program define puse, rclass
-	// Registers CSV as using with project.
-	// Tries to load DTA file if it exists, if it doesn't it loads a CSV file
+	/*
+		puse tries to read data and register project functionality in the following
+		order (unless specified otherwise by user):
+		
+		Read:
+			1. DTA
+			2. CSV
+			3. Excel
+		project:
+			1. CSV
+			2. DTA
+			3. Excel
+	*/
+	
 	syntax, file(string asis) [clear debug opts(string) original]
 	
-	// Drops CSV file extension if any is present
+	// Generate names of files based on extension
 	local newfile = subinstr(`file', ".csv", "", .)
 	local newfile = subinstr("`newfile'", ".dta", "", .)
 	
 	local filecsv = "`newfile'" + ".csv"
 	local filedta = "`newfile'" + ".dta"
-		
-	capture confirm file "`filedta'"
 	
-	if _rc ==0{ //If DTA file exists read DTA file, otherwise read CSV
+	if strpos(`file', ".xls") > 0{
+		local filexls = `file'
+	}
+		
+	// Check existance of files
+	capture confirm file "`filedta'"
+	local dtaExists = _rc
+	
+	capture confirm file "`filecsv'"
+	local csvExists = _rc
+	
+	capture confirm file "`filexls'"
+	local xlsExists = _rc
+	
+	local exists = min(`dtaExists', `csvExists', `xlsExists')
+	
+	if `exists' != 0{
+		di "No files found: `filedta'	 `filecsv'	 `filexls'"
+		break
+	}
+	
+	// Throw exception if user specifies a file extension, but puse reads a different one.
+	if strpos(`file', ".csv") > 0 & `dtaExists' == 0{
+		di "CSV specified, but puse reads DTA file."
+		break
+	}
+	else if strpos(`file', ".xls") > 0 & `dtaExists' == 0{
+		di "XLS specified, but puse reads DTA file"
+		break
+	}
+	else if strpos(`file', ".xls") > 0 & `csvExists' == 0{
+		di "XLS/XLSX specified, but puse reads CSV file"
+		break
+	}
+	
+	// Import data
+	if `dtaExists' ==0{ //If DTA file exists read DTA file
 		use "`filedta'" , `clear'	
 	} 
-	else {
+	else if `csvExists' == 0{ // If no DTA present and CSV exists, read CSV
 		import delimited using "`filecsv'", ///
 		`clear' case(lower) `opts'
+	}
+	else if `xlsExists' == 0 { // Otherwise read Excel
+		if "`opts'" == "" & "`clear'" == ""{
+			import excel using "`filexls'"
+		}
+		else {
+			import excel using "`filexls'" , `opts' `clear'
+		}
 	}
 	
 	*** CSV files are better for project functionality since they don't
 	*** store metadata
 	
-	capture confirm file "`filecsv'"
-	if _rc == 0{ // If  CSV file exists register project functionality using CSV
+	// Register project functionality
+	if `csvExists' == 0{ // If  CSV file exists register project functionality using CSV
 		if "`debug'" == ""{ // If debug option wasn't set, use project functionality
 			if "`original'" == ""{
 				project , uses("`filecsv'") preserve
@@ -34,14 +88,24 @@ program define puse, rclass
 				}
 			}
 		}
-		else{ // IF CSV wasn't found, register project using DTA
+	else if strpos(`file', ".xls") == 0{ // IF CSV wasn't found and no Excel file specified, register project using DTA
 			if "`debug'" == ""{ // If debug option wasn't set, use project functionality
 				if "`original'" == ""{
 					project , uses("`filedta'") preserve
-					}
+				}
 			else{
-				project , original("`filedta'") preserve
+					project , original("`filedta'") preserve
 				}
 			}
-		}		
+		}
+	else {
+			if "`debug'" == ""{ // If debug option wasn't set, use project functionality
+				if "`original'" == ""{
+					project , uses("`filexls'") preserve
+					}
+			else{
+				project , original("`filexls'") preserve
+				}
+			}
+		}
 end
