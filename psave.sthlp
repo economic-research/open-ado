@@ -28,7 +28,11 @@ where
 {p 8 16 2}
 {it:preserve} avoids clearing local memory.
 
+This is open source software distributed under the GPL-3 license. Ownership belong to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is up to date with commit: XX
+
 {title:Authors}
 
-{p 4} Lorenzo Aldeco and Andres Jurado {p_end}
+{p 4} Andres Jurado and Lorenzo Aldeco {p_end}
 {p 4}jose_jurado_vadillo@brown.edu{p_end}
