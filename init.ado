@@ -15,6 +15,7 @@ program define init , rclass
 		 exit 498
 	}
 	
+	capture macro drop debug
 	syntax [, debug debroute(string) double hard ignorefold logfile(string) omit proj(string) route(string)]
 	clear all
 	discard
