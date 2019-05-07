@@ -35,7 +35,7 @@ Save DTA and CSV files with names "auto.dta" and "auto.csv", respectively. Note 
 {it:{help init##init:init}} in "debug" mode turns off project functionality.
 {phang}{cmd:. psave, file("../constructed-data/auto") $deb }{p_end}
 
-{cmdab:init} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help init##init:init}} and {it:{help puse##puse:puse}}.
+{cmdab:psave} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help init##init:init}}, {it:{help pexit##pexit:pexit}} and {it:{help puse##puse:puse}}.
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}

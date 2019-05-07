@@ -50,7 +50,7 @@ names and clear memory. Note that {it:{help init##init:init}} creates a global v
 Load a DTA called "auto.dta" that was created by a dofile inside the project
 {phang}{cmd:. puse, file("../constructed-data/auto.dta") clear $deb}{p_end}
 
-{cmdab:puse} is intended to be used in conjunction with {it:{help psave##project:project}}, {it:{help psave##psave:psave}} and {it:{help init##init:init}}
+{cmdab:puse} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help pexit##pexit:pexit}}, {it:{help psave##psave:psave}} and {it:{help init##init:init}}
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}

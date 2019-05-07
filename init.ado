@@ -8,6 +8,13 @@ program define init , rclass
 		 exit 498
 	}
 	
+	capture findfile pexit.ado
+		if "`r(fn)'" == "" {
+		 di as txt "user-written package pexit needs to be installed first;"
+		 di as txt "use -ssc install pexit- to do that"
+		 exit 498
+	}
+	
 	syntax [, debug debroute(string) double hard ignorefold logfile(string) omit proj(string) route(string)]
 	clear all
 	discard

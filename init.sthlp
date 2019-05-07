@@ -41,7 +41,7 @@ where
 {it:proj} use it to pass the name of the current project (uses {it:project} functionality). 
 
 {p 8 16 2}
-{it:route}: {it:{help project##project:project}} changes the working directory to the current dofile that is compiling. {it:route} changes the working directory if the user choses to do so.
+{it:route}: {it:{help project##project:project}} changes the working directory to the current dofile that is compiling. {it:route} changes the working directory back if the user choses to do so.
 
 {p 8 16 2}
 This ado file does the following:
@@ -59,7 +59,7 @@ Use debug mode to compile a single dofile instead of the entire project. Also, t
 {phang}{cmd:. init, proj(auto) route("../..") debug}{p_end}
 {phang}{it:. rest of the code}{p_end}
 
-{cmdab:init} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help psave##psave:psave}} and {it:{help puse##puse:puse}}. 
+{cmdab:init} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help pexit##pexit:pexit}}, {it:{help psave##psave:psave}} and {it:{help puse##puse:puse}}. 
 Note that {cmdab:init} creates global variables "deb" and "omit" and might overwrite existing macros with the same name.
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
