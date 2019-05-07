@@ -45,15 +45,15 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **date2string** generates a new date variable in string format
 - **esttab2** wrapper for esttab with commonly used options and project functionality
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
-- **init** starts a STATA dofile with commonly used options
+- **init** starts a STATA dofile with commonly used options (ssc install init)
 - **isorder** tells user if one or more variables describe order of dataset
 - **merge2** merges to a CSV file, optionally passes project functionality
 - **mcompare** multi compares a list of variables to a base variable
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
-- **pexit** closes open log files, generates summary stats for verification purposes and stops dofile
+- **pexit** closes open log files, generates summary stats for verification purposes and stops dofile (ssc install pexit)
 - **polgenerate** generates polynomials out of a varlist and labels them
-- **psave** saves to CSV and DTA and registers with project
-- **puse** reads a DTA's, CSV and Excel files, and register dependencies using project functionality.
+- **psave** saves to CSV and DTA and registers with project (ssc install psave)
+- **puse** reads a DTA's, CSV and Excel files, and register dependencies using project functionality (ssc install puse)
 - **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
 - **twowayscatter** plots one or two-way scatters and saves the results 
 - **uniquevals** counts the number of unique values for a list of variables
