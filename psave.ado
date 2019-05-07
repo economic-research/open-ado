@@ -1,4 +1,13 @@
 program define psave , rclass
+	version 14
+	
+	capture findfile init.ado
+		if "`r(fn)'" == "" {
+		 di as txt "user-written package init needs to be installed first;"
+		 di as txt "use -ssc install init- to do that"
+		 exit 498
+	}
+	
 	syntax , file(string asis) [com csvnone debug eopts(string) preserve  randnone]
 	
 	// Drops CSV, DTA file extensions if any are present
@@ -18,7 +27,7 @@ program define psave , rclass
 	}
 	
 	if "`randnone'" == "randnone"{
-		di "Option randnone has been deprecated."
+		di "Option randnone has been deprecated, and will be removed at a latter date."
 		di "psave does not shuffle data by default."
 		di "Consider omitting this argument."
 	}

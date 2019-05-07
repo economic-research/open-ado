@@ -1,10 +1,29 @@
 program define init , rclass
 	version 14
 	
+	capture findfile project.ado
+		if "`r(fn)'" == "" {
+		 di as txt "user-written package project needs to be installed first;"
+		 di as txt "use -ssc install project- to do that"
+		 exit 498
+	}
+	
+	capture findfile pexit.ado
+		if "`r(fn)'" == "" {
+		 di as txt "user-written package pexit needs to be installed first;"
+		 di as txt "use -ssc install pexit- to do that"
+		 exit 498
+	}
+	
 	capture macro drop debug
 	syntax [, debug debroute(string) double hard ignorefold logfile(string) omit proj(string) route(string)]
 	clear all
 	discard
+	
+	if "`hard'" == "hard" & ("`debug'" == "debug" | "`omit'" == "omit"){
+		di "Cannot use option 'hard' with either 'debug' or 'omit'"
+		break
+	}
 	
 	gl deb = "`debug'"
 	gl omit = "`omit'"
