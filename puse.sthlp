@@ -33,12 +33,18 @@ Read:
 	1. DTA
 	2. CSV
 	3. Excel
+	
 project (dependencies):
 	1. CSV
 	2. DTA
 	3. Excel
 
 {it:puse} can guess the file extension of DTA's and CSV files, but Excel file extensions must be specified by the user.
+In general, it is recommended to specify a file extension.
 
-{p 4} Lorenzo Aldeco and Andres Jurado {p_end}
+This is open source software distributed under the GPL-3 license. Ownership belong to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is up to date with commit: XX
+
+{p 4} Andres Jurado and Lorenzo Aldeco  {p_end}
 {p 4}jose_jurado_vadillo@brown.edu{p_end}

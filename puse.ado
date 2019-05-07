@@ -1,4 +1,5 @@
 program define puse, rclass
+	version 14
 	/*
 		puse tries to read data and register project functionality in the following
 		order (unless specified otherwise by user):
@@ -12,6 +13,12 @@ program define puse, rclass
 			2. DTA
 			3. Excel
 	*/
+	capture findfile init.ado
+		if "`r(fn)'" == "" {
+		 di as txt "user-written package init needs to be installed first;"
+		 di as txt "use -ssc install init- to do that"
+		 exit 498
+	}
 	
 	syntax, file(string asis) [clear debug opts(string) original]
 	
@@ -39,7 +46,7 @@ program define puse, rclass
 	local exists = min(`dtaExists', `csvExists', `xlsExists')
 	
 	if `exists' != 0{
-		di "No files found: `filedta'	 `filecsv'	 `filexls'"
+		di "No files found: `filedta'	 `filecsv'	`filexls'"
 		break
 	}
 	
