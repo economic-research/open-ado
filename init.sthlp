@@ -49,6 +49,10 @@ This ado file does the following:
 clear all
 discard
 
+This is open source software distributed under the GPL-3 license. Ownership belong to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is up to date with commit: XX
+
 {title:Author}
 
 {p 4} Andres Jurado {p_end}
