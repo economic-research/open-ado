@@ -1,7 +1,7 @@
 {smcl}
 {* October 19, 2018}{...}
 {hline}
-help for {hi:psave}
+help for {hi:init}
 {hline}
 
 {title:init} - A module to initialize STATA dofiles that leverages {it:{help project##project:project}} functionality to track dependencies of Input/Outputs and achieve efficient compilation of large projects.
@@ -25,7 +25,7 @@ where
 {it:debug} adds {cmdab: global deb "debug"}.
 
 {p 8 16 2}
-{it:debroute} Changes working directory with respect to {it:{help project##project:project}} root directory, ff specified and {it:debug} selected, 
+{it:debroute} Changes working directory with respect to {it:{help project##project:project}} root directory, if {it:debug} is selected.
 
 {p 8 16 2}
 {it:double} adds type double option to STATA.
