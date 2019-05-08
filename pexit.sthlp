@@ -30,7 +30,7 @@ Exit dofile, close open log files and generate a table with summary stats. Note 
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
-This version is up to date with commit: abbe57645ec8c21103eb21e68ba5603044e2d4e5
+This version is as at least as recent as commit: abbe57645ec8c21103eb21e68ba5603044e2d4e5
 
 {title:Author}
 
