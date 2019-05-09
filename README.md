@@ -12,10 +12,11 @@ We realized that while `project` is extremely useful, using it forced us to writ
 Simply run
 `do ados_to_install.do`
 
-## Use user written functionality
+## How to use our repository and codes
 
-Clone this repository into your `ado/` folder and remember to `pull` changes frequently.
-You can find the location of your `ado/personal` folder by typing `sysdir`. You can make your workflow easier and more efficient by copy-pasting `profile.do` in the directory where STATA is installed and modifying the parameters in that dofile so that every time STATA starts it `discard` old version of the `ado` files from memory and points to your appropriate `personal` ado file directory.
+Some of our codes can be installed directly from STATA's SSC. To install the part of our codes that deal with `project` functionality simply run `ssc install pmanage`.
+
+If you want to have the most up to date version of our codes, clone this repository into your `ado/` folder and remember to `pull` changes frequently. You can find the location of your `ado/personal` folder by typing `sysdir`. You can make your workflow easier and more efficient by copy-pasting `profile.do` in the directory where STATA is installed and modifying the parameters in that dofile so that every time STATA starts it `discard` old version of the `ado` files from memory and points to your appropriate `personal` ado file directory.
 
 ## Read our Wiki
 Seriously, we spent a lot of time coming with all those handy tricks
