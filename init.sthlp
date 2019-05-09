@@ -26,6 +26,8 @@ where
 
 {p 8 16 2}
 {it:debroute} Changes working directory with respect to {it:{help project##project:project}} root directory, if {it:debug} is selected.
+{it:debroute} should be used when multiple users are working simultaneously on the same root directory (for example, when multiple users 
+share a server and have access to a shared folder)
 
 {p 8 16 2}
 {it:double} adds type double option to STATA.
