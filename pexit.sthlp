@@ -4,7 +4,7 @@
 help for {hi:pexit}
 {hline}
 
-{title:pexit} - A module to end a dofile and generate a table with summary statistics. 
+{title:pexit} - A module to end a dofile, generate a table with summary statistics and any open logfile. 
 Can use {it:{help project##project:project}} to track dependencies of Input/Outputs and achieve efficient compilation of large projects.
 
 {p 8 16 2}{cmd:pexit}
@@ -27,6 +27,8 @@ where
 Exit dofile, close open log files and generate a table with summary stats. Note that {it:{help init##init:init}} creates a global variable $deb with values "" (empty) or "debug". 
 {it:{help init##init:init}} in "debug" mode turns off project functionality.
 {phang}{cmd:. pexit, summary("./summary/auto") $deb}{p_end}
+
+{cmdab:pexit} is intended to be used in conjunction with {it:{help project##project:project}}, {it:{help init##init:init}}, {it:{help psave##psave:psave}} and {it:{help puse##puse:puse}}. 
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}

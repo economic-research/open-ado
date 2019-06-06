@@ -1,5 +1,6 @@
 program define puse, rclass
 	version 14
+	
 	/*
 		puse tries to read data and register project functionality in the following
 		order (unless specified otherwise by user):
@@ -47,21 +48,21 @@ program define puse, rclass
 	
 	if `exists' != 0{
 		di "No files found: `filedta'	 `filecsv'	`filexls'"
-		break
+		error 601
 	}
 	
 	// Throw exception if user specifies a file extension, but puse reads a different one.
 	if strpos(`file', ".csv") > 0 & `dtaExists' == 0{
 		di "CSV specified, but puse reads DTA file."
-		break
+		error 601
 	}
 	else if strpos(`file', ".xls") > 0 & `dtaExists' == 0{
 		di "XLS specified, but puse reads DTA file"
-		break
+		error 601
 	}
 	else if strpos(`file', ".xls") > 0 & `csvExists' == 0{
 		di "XLS/XLSX specified, but puse reads CSV file"
-		break
+		error 601
 	}
 	
 	// Import data

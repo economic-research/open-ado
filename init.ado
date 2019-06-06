@@ -22,7 +22,7 @@ program define init , rclass
 	
 	if "`hard'" == "hard" & ("`debug'" == "debug" | "`omit'" == "omit"){
 		di "Cannot use option 'hard' with either 'debug' or 'omit'"
-		break
+		error 184
 	}
 	
 	gl deb = "`debug'"
