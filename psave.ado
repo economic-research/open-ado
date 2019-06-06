@@ -22,7 +22,7 @@ program define psave , rclass
 		capture confirm file "`filecsv'"
 		if _rc ==0{ //If CSV file exists throw exception
 			di "CSV file already exists. Consider deleting it or avoiding option csvnone."
-			break
+			error 602
 		} 
 	}
 	
