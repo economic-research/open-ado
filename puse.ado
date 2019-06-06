@@ -1,4 +1,6 @@
 program define puse, rclass
+	version 14
+	
 	/*
 		puse tries to read data and register project functionality in the following
 		order (unless specified otherwise by user):
