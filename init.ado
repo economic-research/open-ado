@@ -51,7 +51,7 @@ program define init , rclass
 		if _rc == 0 & `LogFolderSpecified' == 0 & "`ignorefold'" == ""{ 
 			local logfile = "./log/" + "`logfile'"
 		}
-		
+		cap log close
 		log using "`logfile'" , replace
 	}
 	
