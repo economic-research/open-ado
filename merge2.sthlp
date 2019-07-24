@@ -4,14 +4,14 @@
 help for {hi:merge2}
 {hline}
 
-{title:merge2 - A module that merges CSV files.}
+{title:merge2} - A module that merges CSV and DTA files.
 
 {p 8 16 2}{cmd:merge2}
 {it:varlist} {cmd:,} 
 {cmdab:type:(}{it:string}{cmd:)} {cmdab:file:(}{it:string}{cmd:)} [{cmdab:datevar:(}{it:date variable}{cmd:)} 
 {cmdab:tdate:(}{it:type of date}{cmd:)} {cmdab:fdate:(}{it:desired format}{cmd:)}
 {cmdab:moptions:(}{it:merge options}{cmd:)} {cmdab:idstr:(}{it:varlist}{cmd:)} 
-{cmdab:idnum:(}{it:varlist}{cmd:)} {cmdab:original}]
+{cmdab:idnum:(}{it:varlist}{cmd:)} {cmdab:original} {cmdab:debug}]
 
 {p 4 4 2}
 where
@@ -25,7 +25,7 @@ where
 {title:Description}
 
 {p 4 4 2}
-{cmd:merge2} merges a using file in CSV format. 
+{cmd:merge2} merges a using file in CSV or DTA format. When merging a DTA file only {it:file}, {it:type}, {it:varlist}, {it:original} and {it:debug} options are allowed.
 
 {title:Options}
 {p 8 16 1}
@@ -47,9 +47,16 @@ where
 {it:idnum} variables to destring in both datasets.
 
 {p 8 16 1}
-{it:original} original indicates that the imported CSV file is original, i.e., that it was not generated within the project.
+{it:original} original indicates that the imported file is original, i.e., that it was not generated within the project.
+
+{p 8 16 1}
+{it:debug} {it:merge2} registers project functionality by default. If {it:debug} is selected, this is skipped.
+
+This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is as at least as recent as commit: XX
 
 {title:Author}
 
-{p 4}Andres Jurado{p_end}
-{p 4}jose_jurado_vadillo@brown.edu{p_end}
+{p 4} Andres Jurado{p_end}
+{p 4} jose_jurado_vadillo@brown.edu{p_end}
