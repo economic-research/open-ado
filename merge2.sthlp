@@ -54,7 +54,7 @@ where
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
-This version is as at least as recent as commit: XX
+This version is as at least as recent as commit: bff39fa4630359bbca6aac7749e7f75c441dccf9
 
 {title:Author}
 
