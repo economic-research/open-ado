@@ -18,7 +18,7 @@ version 14
 	// Routine if user selected a DTA file as using file
 	if strpos(`file', ".dta") > 0{
 		// Check for invalid options when using DTA files as using file
-		if "`datevar'" != "" | "`tdate'" != "" | "`fdate'" != "" | "`idstr'" |"`idnum'" != ""{
+		if "`datevar'" != "" | "`tdate'" != "" | "`fdate'" != "" | "`idstr'" != "" |"`idnum'" != ""{
 			di "Only variables file, type, varlist, original and debug are allowed when using file is a STATA file."
 			error 601
 		}
