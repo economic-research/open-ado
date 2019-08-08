@@ -12,7 +12,7 @@ program define psave , rclass
 	syntax , file(string asis) [com csvnone debug eopts(string) ///
 			old(string) preserve]
 	
-	// Drops CSV, DTA file extensions if any are present
+	// Drops CSV, DTA file extensions, if any are present
 	local newfile = subinstr(`file', ".csv", "", .)
 	local newfile = subinstr("`newfile'", ".dta", "", .)
 	
