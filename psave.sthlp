@@ -8,13 +8,13 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:psave}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:com} {cmdab:csvnone} {cmdab:debug} {cmdab:eopts:(}{it:string}{cmd:)} {cmdab:preserve}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:com} {cmdab:csvnone} {cmdab:debug} {cmdab:eopts:(}{it:string}{cmd:)} {cmdab:old:(}{it:integer}{cmd:)} {cmdab:preserve}]
 
 {p 4 4 2}
 where
 
 {p 8 16 2}
-{it:com} compresses the database to save space without losing precission. Regardless of user input {it:psave} will perform that operation if there are more than 1 million observations.
+{it:com} compresses the database to save space without losing precision.
 
 {p 8 16 2}
 {it:csvnone} Don't store results in CSV format. If debug mode isn't specified will register DTA with project.
@@ -24,6 +24,9 @@ where
 
 {p 8 16 2}
 {it:eopts} refers to standard options of {cmdab:export delimited}.
+
+{p 8 16 2}
+{it:old} saves the dataset in an old STATA format.
 
 {p 8 16 2}
 {it:preserve} avoids clearing local memory.
