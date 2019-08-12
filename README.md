@@ -51,6 +51,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **merge2** merges to a CSV file, optionally passes project functionality
 - **mcompare** multi compares a list of variables to a base variable
 - **missing2zero** replaces missing values for a user specified value for a given list of variables
+- **pdo** executes dofiles using project functionality
 - **pexit** closes open log files, generates summary stats for verification purposes and stops dofile (`ssc install pmanage`)
 - **polgenerate** generates polynomials out of a varlist and labels them
 - **psave** saves to CSV and DTA and registers with project (`ssc install pmanage`)
