@@ -45,6 +45,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 ## Directory of ados
 - **date2string** generates a new date variable in string format
 - **esttab2** wrapper for esttab with commonly used options and project functionality
+- **evstudy** utility to perform event study analysis
 - **graph2** exports a graph to PNG and PDF and optionally passes project functionality
 - **init** starts a STATA dofile with commonly used options (`ssc install pmanage`)
 - **isorder** tells user if one or more variables describe order of dataset
