@@ -21,7 +21,11 @@ program define puse, rclass
 		 exit 498
 	}
 	
-	syntax, file(string asis) [clear debug opts(string) original]
+	syntax, file(string asis) [clear debug opts(string) original preserve]
+	
+	if "`preserve'" == "preserve"{
+		di "Option preserve is ignore in puse"
+	}
 	
 	// Generate names of files based on extension
 	local newfile = subinstr(`file', ".csv", "", .)
