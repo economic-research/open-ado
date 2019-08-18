@@ -1,15 +1,19 @@
 {smcl}
-{* 1 October 2018}{...}
+{* August 18, 2019}{...}
 {hline}
-help for {hi:psave}
+help for {hi:mising2zero}
 {hline}
 
-{title:missing2zero - A module that converts missing values for numeric variables.}
+{title:missing2zero} - A module that converts missing values for either numeric or string variables.
 
-{p 8 16 2}{cmd:missing2zero }{cmdab:varlist(numeric)} [, {cmdab:substitute(numeric)}]
+{p 8 16 2}{cmd:missing2zero }{cmdab:varlist(all numeric or all string)} [, {cmdab:substitute(numeric or string)}]
 
 {p 8 16 2}
-By default convert missing values to zero, but the user can specify a different integer.
+By default convert missing values to zero (if numeric) or "NaN" (if string). User can specify a different value.
+
+This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is as at least as recent as commit: 04e4b9f92b57850993067a2fb8f0d7e71be43f24
 
 {title:Author}
 

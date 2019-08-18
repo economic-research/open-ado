@@ -1,12 +1,15 @@
 {smcl}
-{* February 11, 2019}{...}
+{* August 17, 2019}{...}
 {hline}
 help for {hi:values2ascii}
 {hline}
 
-{title:values2ascii} - A module that converts some UTF-8 into ASCII.
+{title:values2ascii} - A module that converts some UTF-8 strings into ASCII.
 
 {p 8 16 2}{cmd:values2ascii} {it:varlist} [{cmd:,}{cmdab:tolower} {cmdab:punct}]
+
+{p 4 4 2}
+{it:values2ascii} can convert to lowercase, replace accents, eliminate double blank spaces and remove trailing and leading blank spaces.
 
 {p 4 4 2}
 where
@@ -16,6 +19,10 @@ where
 
 {p 8 16 2}
 {it:punct} indicates that punctuation should be removed
+
+This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is as at least as recent as commit: 04e4b9f92b57850993067a2fb8f0d7e71be43f24
 
 {title:Author}
 
