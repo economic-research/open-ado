@@ -42,9 +42,43 @@ program define values2ascii , rclass
 	}
 	
 	// 4. Eliminate spaces
-	foreach var in `varlist'{
+	foreach var in `varlist'{ // Loop over variables
 		qui replace `var' = subinstr(`var', char(10),"",.)
-
-	}
-	
+		qui replace `var' = subinstr(`var', char(13),"",.)
+		qui replace `var' = strltrim(`var')
+		
+		// Eliminate leading and trailing blank spaces
+		tempvar strLength marker
+		qui gen `strLength' = strlen(`var')
+		
+		qui levelsof `var' , local(uniquevals)
+		
+		local j = 1
+		qui gen `marker' = .
+		
+		foreach cat in `uniquevals'{ // Loop over categories of variable
+			qui replace `marker' = `j' if `var' == "`cat'"
+			local `j++'
+		}
+		
+		local j = 1
+		
+		foreach cat in `uniquevals'{ // Loop over categories of variable
+			qui sum `strLength' if `marker' == `j' , mean
+			local length = r(mean)
+			
+			// Eliminate trailing space if present
+			if substr("`cat'", `length', 1) == " "{
+				local length = `length' - 1
+				qui replace `var' = substr(`var',1,`length') if `marker' == `j'
+			}
+			else if substr("`cat'", 1, 1) == " "{ // Eliminate leading space if present
+				qui replace `var' = substr(`var',2,`length') if `marker' == `j'
+			}
+			
+			local `j++'
+		} // End loop over categories of variables
+		
+		drop `strLength' `marker'
+	} // End loop over variables
 end
