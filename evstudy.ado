@@ -2,12 +2,22 @@ program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) debug file(string) periods(string) ///
 		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
-		othervar(varlist min=2 max=2) generate]
+		generate othervar(varlist min=2 max=2)]
 	
 	// Check if othervar is empty
 	local j = 0
 	foreach var in `othervar'{
 		local `j++' // othervar is empty if `j' == 0
+	}
+	
+	// Check if cl is empty
+	local k = 0
+	foreach var in `cl'{
+		local `k++'
+	}
+	
+	if `k' > 0 {
+		local cluster "cl(`cl')"
 	}
 	
 	// Optionally build leads and lags
@@ -51,8 +61,7 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	// Regression
-	reghdfe `varlist' `regressors' , absorb(`absorb') cl(`cl')
+	reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
 	nlcom `conditions' , post
 				
 	coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
