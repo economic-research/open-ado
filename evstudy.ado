@@ -2,12 +2,23 @@ program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) debug file(string) periods(string) ///
 		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
-		othervar(varlist min=2 max=2)]
+		othervar(varlist min=2 max=2) generate]
 	
 	// Check if othervar is empty
 	local j = 0
 	foreach var in `othervar'{
 		local `j++' // othervar is empty if `j' == 0
+	}
+	
+	// Optionally build leads and lags
+	if "`generate'" == "generate"{
+		forvalues i = 1(1)`periods'{
+			qui gen `varstem'_f`i' = f`i'.`varstem'
+			label variable `varstem'_f`i' "t-`i'"
+			
+			qui gen `varstem'_l`i' = l`i'.`varstem'
+			label variable `varstem'_l`i' "t+`i'"
+		}
 	}
 	
 	// Build regression parameters in loop
