@@ -2,7 +2,7 @@ program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) debug file(string) periods(string) ///
 		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
-		generate kernel kopts(string) othervar(varlist min=2 max=2)]
+		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
 	
 	// Check if othervar is empty
 	local j = 0
@@ -61,8 +61,8 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
-	nlcom `conditions' , post
+	`qui' reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
+	`qui' nlcom `conditions' , post
 	
 	if "`kernel'" == "kernel"{
 		preserve
@@ -77,7 +77,7 @@ version 14
 		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
 			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
 			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
-			(lpoly coef `days' if `post', tline(`tline', lc(red)) lcolor(cranberry) `kopts')
+			(lpoly coef `days' if `post', tline(`tline', lc(red)) lcolor(cranberry) `kopts') , legend(off)
 		
 		restore
 	}
