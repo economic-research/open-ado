@@ -2,7 +2,7 @@ program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) debug file(string) periods(string) ///
 		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
-		generate othervar(varlist min=2 max=2)]
+		generate kernel kopts(string) othervar(varlist min=2 max=2)]
 	
 	// Check if othervar is empty
 	local j = 0
@@ -63,8 +63,28 @@ version 14
 	
 	reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
 	nlcom `conditions' , post
-				
-	coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-	graphregion(color(white)) tline(`tline', lp(solid) lc(red)) xsize(8)
+	
+	if "`kernel'" == "kernel"{
+		preserve
+		regsave
+		
+		tempvar days post
+		qui gen `days' 		= _n
+		qui replace `days' 	= `days' - `periods'
+		
+		qui gen `post' 		= (`days' > -1)
+		
+		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
+			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
+			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
+			(lpoly coef `days' if `post', tline(`tline', lc(red)) lcolor(cranberry) `kopts')
+		
+		restore
+	}
+	else {
+		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
+		graphregion(color(white)) tline(`tline', lp(solid) lc(red)) xsize(8)
+	}
+	
 	graph2 , file("`file'") `debug'
 end
