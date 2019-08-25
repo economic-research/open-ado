@@ -2,12 +2,33 @@ program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) debug file(string) periods(string) ///
 		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
-		othervar(varlist min=2 max=2)]
+		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
 	
 	// Check if othervar is empty
 	local j = 0
 	foreach var in `othervar'{
 		local `j++' // othervar is empty if `j' == 0
+	}
+	
+	// Check if cl is empty
+	local k = 0
+	foreach var in `cl'{
+		local `k++'
+	}
+	
+	if `k' > 0 {
+		local cluster "cl(`cl')"
+	}
+	
+	// Optionally build leads and lags
+	if "`generate'" == "generate"{
+		forvalues i = 1(1)`periods'{
+			qui gen `varstem'_f`i' = f`i'.`varstem'
+			label variable `varstem'_f`i' "t-`i'"
+			
+			qui gen `varstem'_l`i' = l`i'.`varstem'
+			label variable `varstem'_l`i' "t+`i'"
+		}
 	}
 	
 	// Build regression parameters in loop
@@ -40,11 +61,30 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	// Regression
-	reghdfe `varlist' `regressors' , absorb(`absorb') cl(`cl')
-	nlcom `conditions' , post
-				
-	coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-	graphregion(color(white)) tline(`tline', lp(solid) lc(red)) xsize(8)
+	`qui' reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
+	`qui' nlcom `conditions' , post
+	
+	if "`kernel'" == "kernel"{
+		preserve
+		regsave
+		
+		tempvar days post
+		qui gen `days' 		= _n
+		qui replace `days' 	= `days' - `periods'
+		
+		qui gen `post' 		= (`days' > -1)
+		
+		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
+			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
+			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
+			(lpoly coef `days' if `post', tline(`tline', lc(red)) lcolor(cranberry) `kopts') , legend(off)
+		
+		restore
+	}
+	else {
+		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
+		graphregion(color(white)) tline(`tline', lp(solid) lc(red)) xsize(8)
+	}
+	
 	graph2 , file("`file'") `debug'
 end
