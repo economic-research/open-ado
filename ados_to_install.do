@@ -3,6 +3,7 @@ ssc install carryforward
 ssc install coefplot
 ssc install estout
 ssc install eventstudy2
+ssc install fastreshape
 ssc install latab
 ssc install mat2txt
 ssc install mdesc

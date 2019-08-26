@@ -23,10 +23,10 @@ version 14
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
 		forvalues i = 1(1)`periods'{
-			qui gen `varstem'_f`i' = f`i'.`varstem'
+			cap gen `varstem'_f`i' = f`i'.`varstem'
 			label variable `varstem'_f`i' "t-`i'"
 			
-			qui gen `varstem'_l`i' = l`i'.`varstem'
+			cap gen `varstem'_l`i' = l`i'.`varstem'
 			label variable `varstem'_l`i' "t+`i'"
 		}
 	}

@@ -58,6 +58,7 @@ Our base of ado files will improve the more people contribute to it. There are t
 - **psave** saves to CSV and DTA and registers with project (`ssc install pmanage`)
 - **puse** reads a DTA's, CSV and Excel files, and register dependencies using project functionality (`ssc install pmanage`)
 - **sumby** produces summary statistics for a list of variables according to the categories of a specified variable
+- **tsperiods** divides a panel dataset into equisized groups, with zero denoting the date of an event
 - **twowayscatter** plots one or two-way scatters and saves the results 
 - **uniquevals** counts the number of unique values for a list of variables
 - **usstates** given a variable containing the name of US states, return abbreviations (and viceversa)
