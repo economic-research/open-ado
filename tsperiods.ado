@@ -1,16 +1,16 @@
 program define tsperiods , rclass
 	version 14
-	syntax , datevar(varlist min=1 max=1) event(varlist min=1 max=1) ///
-	id(varlist min=1 max=1) periods(string) [eventdate(varlist min=1 max=1)]
+	syntax , datevar(varlist min=1 max=1) ///
+	id(varlist min=1 max=1) periods(string) [event(varlist min=1 max=1) eventdate(varlist min=1 max=1)]
+		
+	// Check if user specified an even number
+	if mod(`periods',2) != 0{
+		di "{err}Periods cannot be an odd integer. Odd number found where even integer expected"
+		exit 7
+	} 
 	
 	// tsperiods is intended for use with panel data (balanced)
 	tsfill
-	
-	// Check if user specified an even number
-	if mod(`periods',2) == 1{
-		di "{err}Periods cannot be an odd number. Odd number found where even number expected"
-		exit 7
-	} 
 	
 	tempvar datetemp datediff maxobs nvals
 	
@@ -18,6 +18,21 @@ program define tsperiods , rclass
 	local j = 0
 	foreach var in `eventdate'{
 		local `j++'
+	}
+	
+	// Confirm is user specified an event
+	local k = 0
+	foreach var in `event'{
+		local `k++'
+	}
+	
+	if `j' == 0 & `k' == 0{
+		di "{err}Specify either event or eventdate"
+		exit 102
+	}
+	if `j' > 0 & `k' > 0{
+		di "{err}Can only one of two event/eventdate"
+		exit 103
 	}
 	
 	// compute days to/from event
