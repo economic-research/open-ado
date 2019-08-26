@@ -37,9 +37,17 @@ program define tsperiods , rclass
 	
 	// compute days to/from event
 	if `j' == 0{ // j > 0
-		tempvar eventdate
+		tempvar checker eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
+		bys `id': egen `checker' 		= sum(`event')
 		bys `id': egen `eventdate' 		= max(`datetemp')
+		
+		qui su `checker'
+		local max = r(max)
+		if `max' > 1{
+			di "{err}Only one event per ID allowed"
+			exit 
+		}
 	}
 	
 	// Identify how many iterations we need to compute
@@ -62,5 +70,5 @@ program define tsperiods , rclass
 			& `datediff' <= (`i'+1/2)*`periods'+`i')
 	}
 	
-	drop `datetemp' `datediff' `maxobs' `nvals' // STATA doesn't always drop temporary objects
+	drop `checker' `datetemp' `datediff' `maxobs' `nvals' // STATA doesn't always drop temporary objects
 end

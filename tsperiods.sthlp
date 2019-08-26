@@ -4,7 +4,7 @@
 help for {hi:tsperiods}
 {hline}
 
-{title:tsperiods} - A module that divides a panel dataset into equisized periods, with zero denoting the date of an event.  
+{title:tsperiods} - A module that divides a panel dataset into equisized groups, with zero denoting the date of an event.  
 
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
