@@ -9,8 +9,12 @@ program define psave , rclass
 		 exit 498
 	}
 	
-	syntax , file(string asis) [com csvnone debug eopts(string) ///
+	syntax , file(string asis) [clear com csvnone debug eopts(string) ///
 			old(string) preserve]
+	
+	if "`clear'" == "clear"{
+		di "Option clear is ignored in psave"
+	}
 	
 	// Drops CSV, DTA file extensions, if any are present
 	local newfile = subinstr(`file', ".csv", "", .)

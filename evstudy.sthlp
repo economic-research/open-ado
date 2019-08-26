@@ -6,9 +6,9 @@ help for {hi:evstudy}
 
 {title:evstudy} - A module that performs an event study analysis. Can use {it:{help project##project:project}} functionality.
 
-{p 8 16 2}{cmd:evstudy} {cmd:varlist} , {cmdab:basevar:(}{it:string}{cmd:)} {cmdab:debug} {cmdab:file:(}{it:string}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
+{p 8 16 2}{cmd:evstudy} {cmd:varlist} , {cmdab:basevar:(}{it:string}{cmd:)} {cmdab:file:(}{it:string}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
 {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:varstem:(}{it:string}{cmd:)} [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
-{cmdab:generate} {cmdab:kernel} {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:qui}
+{cmdab:debug} {cmdab:generate} {cmdab:kernel} {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:qui}
 {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)}]
 
 {p 4 4 2}
@@ -19,9 +19,6 @@ where
 
 {p 8 16 2}
 {it:basevar} the variable that will be used to normalize the regression coefficients.
-
-{p 8 16 2}
-{it:debug} turn off {it:{help project##project:project}} functionality.
 
 {p 8 16 2}
 {it:file} name of file, {it:without} extension where the resulting graphs will be saved.
@@ -40,6 +37,9 @@ where
 
 {p 8 16 2}
 {it:cl} stands for cluster.
+
+{p 8 16 2}
+{it:debug} turn off {it:{help project##project:project}} functionality.
 
 {p 8 16 2}
 {it:generate} optionally generates leads and lags of the variable that codifies the event of interest. 

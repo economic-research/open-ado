@@ -24,7 +24,7 @@ program define puse, rclass
 	syntax, file(string asis) [clear debug opts(string) original preserve]
 	
 	if "`preserve'" == "preserve"{
-		di "Option preserve is ignore in puse"
+		di "Option preserve is ignored in puse"
 	}
 	
 	// Generate names of files based on extension
