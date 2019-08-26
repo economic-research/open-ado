@@ -1,7 +1,7 @@
 program evstudy , rclass
 version 14
-	syntax varlist , basevar(string) debug file(string) periods(string) ///
-		tline(string) varstem(string)  [absorb(varlist) cl(varlist) ///
+	syntax varlist , basevar(string) file(string) periods(string) ///
+		tline(string) varstem(string)  [absorb(varlist) cl(varlist) debug ///
 		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
 	
 	// Check if othervar is empty

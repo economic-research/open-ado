@@ -11,6 +11,8 @@ help for {hi:tsperiods}
 {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:id:(}{it:varlist}{cmd:)} {cmdab:periods:(}{it:even integer}{cmd:)} 
 [{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)}]
 
+{it:tsperiods} returns a new variabled called {it:epoch} 
+
 {p 4 4 2}
 where
 
