@@ -1,44 +1,9 @@
 program define tsperiods , rclass
 	version 14
 	syntax , datevar(varlist min=1 max=1) ///
-		periods(string) [bys(varlist min=1) ///
-		event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		maxperiods(string) id(varlist min=1 max=1) symmetric]
-	
-	// Confirm if user specified bys
-	local byscount = 0
-	foreach var in `bys'{
-		local `byscount++'
-	}
-	
-	// Confirm if user specified ID
-	local idcount = 0
-	foreach var in `id'{
-		local `idcount++'
-	}
-
-	// Check that user specified either bys or ID
-	if `byscount' == 0 & `idcount' == 0{
-		di "{err}Specify either bys or id"
-		exit 102
-	}
-	if `byscount' > 0 & `idcount' > 0{
-		di "{err}Can only specify one of two bys/id"
-		exit 103
-	}
-	
-	// If user selected bys, confirm that maxperiods is specified
-	if `byscount' > 0 & "`maxperiods'" == ""{
-		di "{err}Need to specify maxperiods if bys specified"
-		exit
-	}
-	
-	if `idcount' > 0{ // If ID specified fill-out pannel (pannel is assumed)
-		tsfill
-	}
-	else {
-		local id "`bys'"
-	}
+		maxperiods(string) periods(string) ///
+		[bys(varlist min=1) event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
+		symmetric]
 	
 	// Confirm if user specified eventdate
 	local datecount = 0
@@ -57,11 +22,11 @@ program define tsperiods , rclass
 		di "{err}Specify either event or eventdate"
 		exit 102
 	}
-	if `datecount' > 0 & `eventcount' > 0{
+	if `datecount' > 0 & `eventcount' > 0{ // Check that at least one option was specified
 		di "{err}Can only specify one of two event/eventdate"
 		exit 103
 	}
-		
+	
 	// Check if event has either 0, 1 or missing (if event specified)
 	if `eventcount' > 0 {
 		qui count if `event' == 1 | `event' == 0 | missing(`event')
@@ -75,42 +40,27 @@ program define tsperiods , rclass
 		}
 	}
 	
-	tempvar datetemp datediff maxobs nvals
+	// Confirm if user specified bys
+	local byscount = 0
+	foreach var in `bys'{
+		local `byscount++'
+	}	
+		
+	// Check that if event was specified, then bys was also specified
+	if `byscount' == 0 & `eventcount' > 0{
+		di "{err}If event is specified, then bys must also be specified"
+		exit
+	} 
 	
 	// compute days to/from event
 	if `eventcount' > 0{ // If user specified event
-		tempvar eventdate
+		tempvar datetemp eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
-		bys `id': egen `eventdate' 		= max(`datetemp')
+		bys `bys': egen `eventdate' 		= max(`datetemp')
 		drop `datetemp' // STATA doesn't always drop temporary objects
-		
-		// Check that there's a maximum of 1 event per ID
-		if `idcount' > 0{
-			tempvar checker
-			bys `id': egen `checker' 		= sum(`event')
-			
-			qui su `checker'
-			local max = r(max)
-			if `max' > 1{
-				di "{err}Only one event per ID allowed"
-				exit 
-			}
-			drop `checker'
-		}
 	}
-	
-	// Identify how many iterations we need to compute
-	if "`maxperiods'" == ""{
-		bys `id': gen `nvals' 		= _n
-		bys `id': egen `maxobs' 	= max(`nvals')
 		
-		qui su `maxobs'
-		local maxval 		= r(max)
-		local maxperiods 	= round(`maxval'/`periods')
-		
-		drop `maxobs' `nvals'
-	}
-	
+	tempvar datediff
 	qui gen `datediff' 	= `datevar' - `eventdate'
 	
 	if "`symmetric'" == "" { // t-0 covers [0,periods) 
