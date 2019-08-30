@@ -3,7 +3,12 @@ program define tsperiods , rclass
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		maxperiods(string) periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		symmetric]
+		name(string) symmetric]
+	
+	// Set name for new variable
+	if "`name'" == ""{
+		local name epoch
+	}
 	
 	// Confirm if user specified eventdate
 	local datecount = 0
@@ -42,6 +47,8 @@ program define tsperiods , rclass
 		}
 	}
 		
+	tab epoch , generate(timeframe)	
+		
 	// compute days to/from event
 	tempvar mindate maxdate
 	if `eventcount' > 0{ // If user specified event
@@ -49,10 +56,10 @@ program define tsperiods , rclass
 		gen `datetemp' 				= `datevar' if `event' == 1
 		bys `bys': egen `eventdate' 		= max(`datetemp')
 		
-		bys `bys': egen mindate = min(`datetemp')
-		bys `bys': egen maxdate = max(`datetemp')
+		bys `bys': egen `mindate' = min(`datetemp')
+		bys `bys': egen `maxdate' = max(`datetemp')
 		
-		count if `mindate' != `maxdate'
+		qui count if `mindate' != `maxdate'
 		local counts = r(N)
 		if `counts' != 0 {
 			di "{err}More than one event specified by ID"
@@ -61,10 +68,10 @@ program define tsperiods , rclass
 		drop `datetemp' `maxdate' `mindate' // STATA doesn't always drop temporary objects
 	}
 	else{ // If user specified a date
-		bys `bys': egen mindate = min(`eventdate')
-		bys `bys': egen maxdate = max(`eventdate')
+		bys `bys': egen `mindate' = min(`eventdate')
+		bys `bys': egen `maxdate' = max(`eventdate')
 		
-		count if `mindate' != `maxdate'
+		qui count if `mindate' != `maxdate'
 		local counts = r(N)
 		if `counts' != 0 {
 			di "{err}More than one eventdate specified by ID"
@@ -77,13 +84,13 @@ program define tsperiods , rclass
 	qui gen `datediff' 	= `datevar' - `eventdate'
 	
 	if "`symmetric'" == "" { // t-0 covers [0,periods) 
-		qui gen epoch = 0 if (`datediff' >= 0 & `datediff' <= `periods'-1)
+		qui gen `name' = 0 if (`datediff' >= 0 & `datediff' <= `periods'-1)
 		
 		forvalues i=1(1)`maxperiods'{
-			qui replace epoch = -`i' if (`datediff' >= -`i'*`periods' ///
+			qui replace `name' = -`i' if (`datediff' >= -`i'*`periods' ///
 				& `datediff' <= -`periods'*(`i' - 1) - 1)
 			
-			qui replace epoch = `i' if (`datediff' >= `i' * `periods' ///
+			qui replace `name' = `i' if (`datediff' >= `i' * `periods' ///
 				& `datediff' <= `periods' * (`i'+1) - 1)
 		}
 	}
@@ -93,13 +100,13 @@ program define tsperiods , rclass
 			exit 7
 		}
 		
-		qui gen epoch = 0 if (`datediff' >= -`periods'/2 & `datediff' <= `periods'/2)
+		qui gen `name' = 0 if (`datediff' >= -`periods'/2 & `datediff' <= `periods'/2)
 	
 		forvalues i=1(1)`maxiter'{
-			qui replace epoch = -`i' if (`datediff' >= -(`i'+1/2)*`periods'-`i' ///
+			qui replace `name' 	= -`i' if (`datediff' >= -(`i'+1/2)*`periods'-`i' ///
 				& `datediff' <= -(`i'-1/2)*`periods'-`i')
 			
-			qui replace epoch = `i' if (`datediff' >= (`i'-1/2)*`periods' + `i' ///
+			qui replace `name'	= `i' if (`datediff' >= (`i'-1/2)*`periods' + `i' ///
 				& `datediff' <= (`i'+1/2)*`periods'+`i')
 			}
 	}

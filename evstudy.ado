@@ -1,32 +1,58 @@
 program evstudy , rclass
 version 14
 	syntax varlist , basevar(string) file(string) periods(string) ///
-		tline(string) varstem(string)  [absorb(varlist) cl(varlist) debug ///
+		tline(string) varstem(varlist min=1 max=1)  [absorb(varlist) ///
+		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
 	
-	// Check if othervar is empty
-	local j = 0
-	foreach var in `othervar'{
-		local `j++' // othervar is empty if `j' == 0
+
+	// Check if bys is empty
+	local byscount = 0
+	foreach var in `bys'{
+		local `byscount++'
 	}
 	
 	// Check if cl is empty
-	local k = 0
+	local clcount = 0
 	foreach var in `cl'{
-		local `k++'
+		local `clcount++'
 	}
 	
-	if `k' > 0 {
+	// Check if datevar is empty
+	local datecount = 0
+	foreach var in `datevar'{
+		local `datecount++'
+	}
+	
+	// Check if othervar is empty
+	local othervarcount = 0
+	foreach var in `othervar'{
+		local `othervarcount++'
+	}
+	
+	// Verify that is option generate was selected, then bys and datevar specified
+	if "`generate'" == "generate"{
+		if `byscount' == 0 | `datecount' == 0{
+			di "{err}Need to specify bys and datevar if option generate is specified"
+			exit
+		}
+	}
+	
+	
+	if `clcount' > 0 {
 		local cluster "cl(`cl')"
 	}
 	
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
+		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`periods') ///
+			periods(1) event(`varstem') name(myevent)
+			
 		forvalues i = 1(1)`periods'{
-			cap gen `varstem'_f`i' = f`i'.`varstem'
+			qui gen `varstem'_f`i' = (myevent == -`i')
 			label variable `varstem'_f`i' "t-`i'"
 			
-			cap gen `varstem'_l`i' = l`i'.`varstem'
+			qui gen `varstem'_l`i' = (myevent == `i')
 			label variable `varstem'_l`i' "t+`i'"
 		}
 	}
@@ -36,7 +62,7 @@ version 14
 	local regressors ""
 	
 	// Leads of the RHS correspond to "pre-trend" = before treatment
-	if `j' > 0 {
+	if `othervarcount' > 0 {
 		tokenize `othervar'
 		local conditions "`conditions' (`1': _b[`1'] - _b[`basevar'])"
 		local regressors "`regressors' `1'"
@@ -56,7 +82,7 @@ version 14
 		local regressors "`regressors' `varstem'_l`i'"
 	}
 	
-	if `j' > 0 {
+	if `othervarcount' > 0 {
 		local conditions "`conditions' (`2':_b[`2']-_b[`basevar'])"
 		local regressors "`regressors' `2'"
 	}
