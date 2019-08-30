@@ -3,12 +3,6 @@ program define tsperiods , rclass
 	syntax , datevar(varlist min=1 max=1) ///
 	id(varlist min=1 max=1) periods(string) [event(varlist min=1 max=1) eventdate(varlist min=1 max=1)]
 		
-	// Check if user specified an even number
-	if mod(`periods',2) != 0{
-		di "{err}Periods cannot be an odd integer. Odd number found where even integer expected"
-		exit 7
-	} 
-	
 	// tsperiods is intended for use with panel data (balanced)
 	tsfill
 	
@@ -26,6 +20,7 @@ program define tsperiods , rclass
 		local `k++'
 	}
 	
+	// Check that either event or eventdate were specified (but not both)
 	if `j' == 0 & `k' == 0{
 		di "{err}Specify either event or eventdate"
 		exit 102
@@ -35,13 +30,27 @@ program define tsperiods , rclass
 		exit 103
 	}
 	
+	// Check if event has either 0, 1 or missing (if event specified)
+	if `k' > 0 {
+		qui count if `event' == 1 | `event' == 0 | missing(`event')
+		local counter1 = r(N)
+		qui count
+		local counter2 = r(N)
+		
+		if `counter1' != `counter2'{
+			di "{err}Event dummy can only have 0, 1 or missing values"
+			exit 175
+		}
+	}
+	
 	// compute days to/from event
-	if `j' == 0{ // j > 0
+	if `k' > 0{ // or j == 0: if user didn't specify an eventdate
 		tempvar checker eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
 		bys `id': egen `checker' 		= sum(`event')
 		bys `id': egen `eventdate' 		= max(`datetemp')
 		
+		// Check that there's a maximum of 1 event per ID
 		qui su `checker'
 		local max = r(max)
 		if `max' > 1{
@@ -60,14 +69,14 @@ program define tsperiods , rclass
 	
 	qui gen `datediff' 	= `datevar' - `eventdate'
 	
-	qui gen epoch = 0 if (`datediff' >= -`periods'/2 & `datediff' <= `periods'/2)
+	qui gen epoch = 0 if (`datediff' >= 0 & `datediff' <= `periods'-1)
 	
 	forvalues i=1(1)`maxiter'{
-		qui replace epoch = -`i' if (`datediff' >= -(`i'+1/2)*`periods'-`i' ///
-			& `datediff' <= -(`i'-1/2)*`periods'-`i')
+		qui replace epoch = -`i' if (`datediff' >= -`i'*`periods' ///
+			& `datediff' <= -`periods'*(`i' - 1) - 1)
 		
-		qui replace epoch = `i' if (`datediff' >= (`i'-1/2)*`periods' + `i' ///
-			& `datediff' <= (`i'+1/2)*`periods'+`i')
+		qui replace epoch = `i' if (`datediff' >= `i' * `periods' ///
+			& `datediff' <= `periods' * (`i'+1) - 1)
 	}
 	
 	drop `checker' `datetemp' `datediff' `maxobs' `nvals' // STATA doesn't always drop temporary objects
