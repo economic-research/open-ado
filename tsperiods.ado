@@ -50,7 +50,11 @@ program define tsperiods , rclass
 	if `byscount' == 0 & `eventcount' > 0{
 		di "{err}If event is specified, then bys must also be specified"
 		exit
-	} 
+	}
+	if `byscount'>0 & `datecount' > 0{
+		di "{err}Option bys is ignored when eventdate specified"
+		exit
+	}
 	
 	// compute days to/from event
 	if `eventcount' > 0{ // If user specified event
