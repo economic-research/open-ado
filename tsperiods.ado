@@ -46,9 +46,7 @@ program define tsperiods , rclass
 			exit 175
 		}
 	}
-		
-	tab epoch , generate(timeframe)	
-		
+			
 	// compute days to/from event
 	tempvar mindate maxdate
 	if `eventcount' > 0{ // If user specified event

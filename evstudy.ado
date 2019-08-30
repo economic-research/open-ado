@@ -55,6 +55,7 @@ version 14
 			qui gen `varstem'_l`i' = (myevent == `i')
 			label variable `varstem'_l`i' "t+`i'"
 		}
+		qui drop myevent
 	}
 	
 	// Build regression parameters in loop
