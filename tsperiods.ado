@@ -10,10 +10,10 @@ program define tsperiods , rclass
 	foreach var in `bys'{
 		local `byscount++'
 	}
-
+	
 	// Confirm if user specified ID
 	local idcount = 0
-	foreach var in `idcount'{
+	foreach var in `id'{
 		local `idcount++'
 	}
 
@@ -57,7 +57,7 @@ program define tsperiods , rclass
 		di "{err}Specify either event or eventdate"
 		exit 102
 	}
-	if `eventcount' > 0 & `eventcount' > 0{
+	if `datecount' > 0 & `eventcount' > 0{
 		di "{err}Can only specify one of two event/eventdate"
 		exit 103
 	}
@@ -82,6 +82,7 @@ program define tsperiods , rclass
 		tempvar eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
 		bys `id': egen `eventdate' 		= max(`datetemp')
+		drop `datetemp' // STATA doesn't always drop temporary objects
 		
 		// Check that there's a maximum of 1 event per ID
 		if `idcount' > 0{
@@ -94,6 +95,7 @@ program define tsperiods , rclass
 				di "{err}Only one event per ID allowed"
 				exit 
 			}
+			drop `checker'
 		}
 	}
 	
@@ -105,6 +107,8 @@ program define tsperiods , rclass
 		qui su `maxobs'
 		local maxval 		= r(max)
 		local maxperiods 	= round(`maxval'/`periods')
+		
+		drop `maxobs' `nvals'
 	}
 	
 	qui gen `datediff' 	= `datevar' - `eventdate'
@@ -137,5 +141,5 @@ program define tsperiods , rclass
 			}
 	}
 	
-	drop `checker' `datetemp' `datediff' `maxobs' `nvals' // STATA doesn't always drop temporary objects
+	drop `datediff' 
 end
