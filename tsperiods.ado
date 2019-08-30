@@ -1,8 +1,8 @@
 program define tsperiods , rclass
 	version 14
-	syntax , datevar(varlist min=1 max=1) ///
+	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		maxperiods(string) periods(string) ///
-		[bys(varlist min=1) event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
+		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
 		symmetric]
 	
 	// Confirm if user specified eventdate
@@ -22,7 +22,9 @@ program define tsperiods , rclass
 		di "{err}Specify either event or eventdate"
 		exit 102
 	}
-	if `datecount' > 0 & `eventcount' > 0{ // Check that at least one option was specified
+	
+	// Check that at least one option event or eventdate was specified
+	if `datecount' > 0 & `eventcount' > 0{
 		di "{err}Can only specify one of two event/eventdate"
 		exit 103
 	}
@@ -39,31 +41,38 @@ program define tsperiods , rclass
 			exit 175
 		}
 	}
-	
-	// Confirm if user specified bys
-	local byscount = 0
-	foreach var in `bys'{
-		local `byscount++'
-	}	
 		
-	// Check that if event was specified, then bys was also specified
-	if `byscount' == 0 & `eventcount' > 0{
-		di "{err}If event is specified, then bys must also be specified"
-		exit
-	}
-	if `byscount'>0 & `datecount' > 0{
-		di "{err}Option bys is ignored when eventdate specified"
-		exit
-	}
-	
 	// compute days to/from event
+	tempvar mindate maxdate
 	if `eventcount' > 0{ // If user specified event
 		tempvar datetemp eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
 		bys `bys': egen `eventdate' 		= max(`datetemp')
-		drop `datetemp' // STATA doesn't always drop temporary objects
-	}
 		
+		bys `bys': egen mindate = min(`datetemp')
+		bys `bys': egen maxdate = max(`datetemp')
+		
+		count if `mindate' != `maxdate'
+		local counts = r(N)
+		if `counts' != 0 {
+			di "{err}More than one event specified by ID"
+			exit
+		}
+		drop `datetemp' `maxdate' `mindate' // STATA doesn't always drop temporary objects
+	}
+	else{ // If user specified a date
+		bys `bys': egen mindate = min(`eventdate')
+		bys `bys': egen maxdate = max(`eventdate')
+		
+		count if `mindate' != `maxdate'
+		local counts = r(N)
+		if `counts' != 0 {
+			di "{err}More than one eventdate specified by ID"
+			exit
+		}
+		drop `maxdate' `mindate'
+	}
+			
 	tempvar datediff
 	qui gen `datediff' 	= `datevar' - `eventdate'
 	
