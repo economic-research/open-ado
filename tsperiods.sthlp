@@ -9,9 +9,9 @@ help for {hi:tsperiods}
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
 {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:maxperiods:(}{it:integer}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmd:symmetric}]
+[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmdab:name:(}{it:string}{cmd:)} {cmd:symmetric}]
 
-{it:tsperiods} returns a new variabled called {it:epoch} 
+{it:tsperiods} returns a new variabled called {it:epoch}, unless {it:name} is specified
 
 {p 4 4 2}
 where

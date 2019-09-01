@@ -5,7 +5,13 @@ version 14
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
 	
-
+	// Verify that tsperiods is installed
+	capture findfile tsperiods.ado
+	if "`r(fn)'" == "" {
+		 di as txt "user-written package tsperiods needs to be installed first;"
+		 exit 498
+	}
+	
 	// Check if bys is empty
 	local byscount = 0
 	foreach var in `bys'{
@@ -30,7 +36,7 @@ version 14
 		local `othervarcount++'
 	}
 	
-	// Verify that is option generate was selected, then bys and datevar specified
+	// Verify that if option generate was selected, then bys and datevar specified
 	if "`generate'" == "generate"{
 		if `byscount' == 0 | `datecount' == 0{
 			di "{err}Need to specify bys and datevar if option generate is specified"
