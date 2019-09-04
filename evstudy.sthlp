@@ -9,60 +9,66 @@ help for {hi:evstudy}
 {p 8 16 2}{cmd:evstudy} {cmd:varlist} , {cmdab:basevar:(}{it:string}{cmd:)} {cmdab:file:(}{it:string}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
 {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:varstem:(}{it:string}{cmd:)} 
 [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
-{cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:generate} {cmdab:kernel} {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:qui}
+{cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:force} {cmdab:generate} {cmdab:kernel} {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:mevents} {cmdab:qui}
 {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)}]
 
 {p 4 4 2}
 where
 
 {p 8 16 2}
-{it:varlist} has at least one variable, the left hand side variable. Every other variable included here is considered a control.
+{cmd:varlist} has at least one variable, the left hand side variable. Every other variable included here is considered a control.
 
 {p 8 16 2}
-{it:basevar} the variable that will be used to normalize the regression coefficients.
+{cmd:basevar} the variable that will be used to normalize the regression coefficients.
 
 {p 8 16 2}
-{it:file} name of file, {it:without} extension, where the resulting graphs will be saved.
+{cmd:file} name of file, {it:without} extension, where the resulting graphs will be saved.
 
 {p 8 16 2}
-{it:periods} number of periods around the event that will be considered.
+{cmd:periods} number of periods around the event that will be considered.
 
 {p 8 16 2}
-{it:tline} position of a vertical line in the resulting plot.
+{cmd:tline} position of a vertical line in the resulting plot.
 
 {p 8 16 2}
-{it:varstem} {cmd:evstudy} requires that the leads and lags included have the same stem.
+{cmd:varstem} {cmd:evstudy} requires that the leads and lags included have the same stem.
 
 {p 8 16 2}
-{it:absorb} fixed effects.
+{cmd:absorb} fixed effects.
 
 {p 8 16 2}
-{it:bys} and {it:datevar} need to be specified if option {it:generate} is used. {it:bys} denotes a list of variables that constitute an ID in the data.
+{cmd:bys} and {cmd:datevar} need to be specified if option {cmd:generate} is used. {cmd:bys} denotes a list of variables that constitute an ID in the data.
 
 {p 8 16 2}
-{it:cl} stands for cluster.
+{cmd:cl} stands for cluster.
 
 {p 8 16 2}
-{it:datevar} Optional argument. {it:bys} and {it:datevar} need to be specified if option {it:generate} is used. {it:datevar} indicates to {cmdab:evstudy} which is the date variable to be used for constructing leads and lags for the event.
+{cmd:datevar} Optional argument. {cmd:bys} and {it:datevar} need to be specified if option {cmd:generate} is used. {cmd:datevar} indicates to {cmdab:evstudy} which is the date variable to be used for constructing leads and lags for the event.
 
 {p 8 16 2}
-{it:debug} turn off {it:{help project##project:project}} functionality.
+{cmd:debug} turn off {it:{help project##project:project}} functionality.
 
 {p 8 16 2}
-{it:generate} optionally generates leads and lags of the variable that codifies the event of interest. 
+{cmd:force} if option {cmd:generate} is selected, {cmd:force} ignores error messages when trying to create lead and lag variables that are already defined.
+
+{p 8 16 2}
+{cmd:generate} optionally generates leads and lags of the variable that codifies the event of interest. 
 It generates a sequence of variables of the type: {it:varstem_f`periods',..., varstem_l`periods'} 
 
 {p 8 16 2}
-{it:kernel} produce kernel plots of event study instead of displaying regression coefficients. Uses {it:{help lpoly##lpoly:lpoly}}.
+{cmd:kernel} produce kernel plots of event study instead of displaying regression coefficients. Uses {it:{help lpoly##lpoly:lpoly}}.
 
 {p 8 16 2}
-{it:kopts} {it:{help lpoly##lpoly:lpoly}} options.
+{cmd:kopts} {it:{help lpoly##lpoly:lpoly}} options.
 
 {p 8 16 2}
-{it:qui} supress regression output.
+{cmd:mevents} by default {cmd:evstudy} checks if there's a maximum of 1 events per ID. {cmd:mevents} (multiple events) turns off this warning.
 
 {p 8 16 2}
-{it:othervar} can accept two additional variable that are included at the extreme left and right in the plot respectively. Useful when one wants to include dummies that include every period before/after t-X/t+X respectively.
+{cmd:qui} supress regression output.
+
+{p 8 16 2}
+{cmd:othervar} can accept two additional variable that are included at the extreme left and right in the plot respectively. Useful when one wants to include dummies that include every period before/after t-X/t+X respectively.
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}

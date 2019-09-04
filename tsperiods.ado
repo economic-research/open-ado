@@ -3,7 +3,7 @@ program define tsperiods , rclass
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		maxperiods(string) periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		name(string) symmetric]
+		mevents name(string) symmetric]
 	
 	// Set name for new variable
 	if "`name'" == ""{
@@ -59,8 +59,8 @@ program define tsperiods , rclass
 		
 		qui count if `mindate' != `maxdate'
 		local counts = r(N)
-		if `counts' != 0 {
-			di "{err}More than one event specified by ID"
+		if `counts' != 0 & "`mevents'" == "" {
+			di "{err}More than one event specified by ID. This warning can be turned off with option mevents."
 			exit
 		}
 		drop `datetemp' `maxdate' `mindate' // STATA doesn't always drop temporary objects
@@ -71,8 +71,8 @@ program define tsperiods , rclass
 		
 		qui count if `mindate' != `maxdate'
 		local counts = r(N)
-		if `counts' != 0 {
-			di "{err}More than one eventdate specified by ID"
+		if `counts' != 0 & "`mevents'" == "" {
+			di "{err}More than one eventdate specified by ID. This warning can be turned off with option mevents."
 			exit
 		}
 		drop `maxdate' `mindate'

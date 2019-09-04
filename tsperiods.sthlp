@@ -9,33 +9,39 @@ help for {hi:tsperiods}
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
 {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:maxperiods:(}{it:integer}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmdab:name:(}{it:string}{cmd:)} {cmd:symmetric}]
+[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmd:mevents} {cmdab:name:(}{it:string}{cmd:)} {cmd:symmetric}]
 
-{it:tsperiods} returns a new variabled called {it:epoch}, unless {it:name} is specified
+{cmd:tsperiods} returns a new variabled called {it:epoch}, unless {cmd:name} is specified
 
 {p 4 4 2}
 where
 
 {p 8 16 2}
-{it:bys} list of variables that constitute an ID.
+{cmd:bys} list of variables that constitute an ID.
 
 {p 8 16 2}
-{it:datevar} is a date variable
+{cmd:datevar} is a date variable
 
 {p 8 16 2}
-{it:maxperiods} the maximum number of epochs to be considered
+{cmd:maxperiods} the maximum number of epochs to be considered
 
 {p 8 16 2}
-{it:periods} length on an epoch. If option {it:symmetric} is selected, {it:periods} must be even.
+{cmd:periods} length on an epoch. If option {cmd:symmetric} is selected, {cmd:periods} must be even.
   
 {p 8 16 2}
-{it:event} is a binary variable that captures the timing of an event. Can only be 0, 1 or missing. Can only have 1 date of event per ID.
+{cmd:event} is a binary variable that captures the timing of an event. Can only be 0, 1 or missing. Can only have 1 date of event per ID.
 
 {p 8 16 2}
-{it:eventdate} a variable with the date of the event. Can only specify either {it:event} or {it:eventdate}. Can only have 1 {it:eventdate} per ID.
+{cmd:eventdate} a variable with the date of the event. Can only specify either {cmd:event} or {cmd:eventdate}. Can only have 1 {cmd:eventdate} per ID.
 
 {p 8 16 2}
-{it:symmetric} by default {cmd:tsperiods} constructs epoch as follows (consider the case of t-0): [0,periods). If symmetric is specified then t-0 is constructed as [-periods/2, periods/2].
+{cmd:mevents} by default {cmd:tsperiods} checks if there's a maximum of 1 events per ID. {cmd:mevents} (multiple events) turns off this warning.
+
+{p 8 16 2}
+{cmd:name} of new variable created. If no name is specified, the resulting variable is called {it:epoch}.
+
+{p 8 16 2}
+{cmd:symmetric} by default {cmd:tsperiods} constructs epoch as follows (consider the case of t-0): [0,periods). If symmetric is specified then t-0 is constructed as [-periods/2, periods/2].
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}

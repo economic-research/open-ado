@@ -3,7 +3,7 @@ version 14
 	syntax varlist , basevar(string) file(string) periods(string) ///
 		tline(string) varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
-		generate kernel kopts(string) qui othervar(varlist min=2 max=2)]
+		force generate kernel kopts(string) mevents qui othervar(varlist min=2 max=2)]
 	
 	// Verify that tsperiods is installed
 	capture findfile tsperiods.ado
@@ -44,24 +44,38 @@ version 14
 		}
 	}
 	
-	
+	// Define cluster variable
 	if `clcount' > 0 {
 		local cluster "cl(`cl')"
+	}
+	
+	// Define capture
+	if "`force'" == "force"{
+		if "`generate'" == ""{
+			di "{err}Option force can only be specified with option generate"
+			exit
+		}
+		local capture cap
 	}
 	
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
 		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`periods') ///
-			periods(1) event(`varstem') name(myevent)
+			periods(1) event(`varstem') `mevents' name(myevent)
+			
+		// Prevent STATA from storing myevent variable 
+		tempvar myevent
+		qui gen `myevent' = myevent
+		qui drop myevent
 			
 		forvalues i = 1(1)`periods'{
-			qui gen `varstem'_f`i' = (myevent == -`i')
+			`capture' gen `varstem'_f`i' = (`myevent' == -`i')
 			label variable `varstem'_f`i' "t-`i'"
 			
-			qui gen `varstem'_l`i' = (myevent == `i')
+			`capture' gen `varstem'_l`i' = (`myevent' == `i')
 			label variable `varstem'_l`i' "t+`i'"
 		}
-		qui drop myevent
+		qui drop `myevent'
 	}
 	
 	// Build regression parameters in loop
