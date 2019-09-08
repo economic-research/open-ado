@@ -12,6 +12,12 @@ version 14
 		 exit 498
 	}
 	
+	// Check if absorb is empty
+	local abscount = 0
+	foreach var in `absorb'{
+		local `abscount++'
+	}
+	
 	// Check if bys is empty
 	local byscount = 0
 	foreach var in `bys'{
@@ -43,6 +49,15 @@ version 14
 			exit
 		}
 	}
+	
+	// Create local for absorb
+	if `abscount' >0{
+		local abslocal "absorb(`absorb')"
+	}
+	else {
+		local abslocal "noabsorb"
+	}
+	
 	
 	// Define cluster variable
 	if `clcount' > 0 {
@@ -108,7 +123,7 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	`qui' reghdfe `varlist' `regressors' , absorb(`absorb') `cluster'
+	`qui' reghdfe `varlist' `regressors' , `abslocal' `cluster'
 	`qui' nlcom `conditions' , post
 	
 	if "`kernel'" == "kernel"{

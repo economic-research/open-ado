@@ -6,7 +6,7 @@ help for {hi:psave}
 
 {title:uniquevals - A module that displays the number of distinct values for one or more variable.}
 
-{p 8 16 2}{cmd:uniquevals }{cmdab:varlist}
+{p 8 16 2}{cmd:uniquevals }{cmdab:varlist} [if]
 
 {title:Author}
 
