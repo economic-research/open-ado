@@ -48,24 +48,24 @@ program define tsperiods , rclass
 	}
 			
 	// compute days to/from event
-	tempvar mindate maxdate
+	tempvar maxdate
 	if `eventcount' > 0{ // If user specified event
 		tempvar datetemp eventdate
 		gen `datetemp' 				= `datevar' if `event' == 1
-		bys `bys': egen `eventdate' 		= max(`datetemp')
+		bys `bys': egen `eventdate' 		= min(`datetemp')
 		
-		bys `bys': egen `mindate' = min(`datetemp')
 		bys `bys': egen `maxdate' = max(`datetemp')
 		
-		qui count if `mindate' != `maxdate'
+		qui count if `eventdate' != `maxdate'
 		local counts = r(N)
 		if `counts' != 0 & "`mevents'" == "" {
 			di "{err}More than one event specified by ID. This warning can be turned off with option mevents."
 			exit
 		}
-		drop `datetemp' `maxdate' `mindate' // STATA doesn't always drop temporary objects
+		drop `datetemp' `maxdate' // STATA doesn't always drop temporary objects
 	}
 	else{ // If user specified a date
+		tempvar mindate
 		bys `bys': egen `mindate' = min(`eventdate')
 		bys `bys': egen `maxdate' = max(`eventdate')
 		
