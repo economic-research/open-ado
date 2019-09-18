@@ -5,9 +5,15 @@ program define tsperiods , rclass
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
 		mevents name(string) symmetric]
 	
-	// Set name for new variable
-	if "`name'" == ""{
-		local name epoch
+	*** I Checks
+	// Check that user provided a valid panel
+	tempvar nvals
+	bys `bys' `datevar': gen `nvals' = _n
+	qui count if `nvals' > 1
+	local counts = r(N)
+	if `counts' > 0 {
+		di "{err}`bys' and `datevar' do not uniquely identify observations"
+		exit
 	}
 	
 	// Confirm if user specified eventdate
@@ -22,13 +28,13 @@ program define tsperiods , rclass
 		local `eventcount++'
 	}
 	
-	// Check that either event or eventdate were specified (but not both)
+	// Check whether no event or eventdate were specified
 	if `datecount' == 0 & `eventcount' == 0{
 		di "{err}Specify either event or eventdate"
 		exit 102
 	}
 	
-	// Check that at least one option event or eventdate was specified
+	// Check that user didn't specify event AND eventdate
 	if `datecount' > 0 & `eventcount' > 0{
 		di "{err}Can only specify one of two event/eventdate"
 		exit 103
@@ -46,40 +52,108 @@ program define tsperiods , rclass
 			exit 175
 		}
 	}
-			
-	// compute days to/from event
-	tempvar maxdate
-	if `eventcount' > 0{ // If user specified event
-		tempvar datetemp eventdate
-		gen `datetemp' 				= `datevar' if `event' == 1
-		bys `bys': egen `eventdate' 		= min(`datetemp')
-		
-		bys `bys': egen `maxdate' = max(`datetemp')
-		
-		qui count if `eventdate' != `maxdate'
+	
+	// Check that eventdate has no missing values if specified
+	if `datecount' > 0 {
+		qui count if `eventdate' == .
 		local counts = r(N)
-		if `counts' != 0 & "`mevents'" == "" {
-			di "{err}More than one event specified by ID. This warning can be turned off with option mevents."
+		if `counts' > 0{
+			di "{err}`eventdate' cannot have missing values"
 			exit
 		}
-		drop `datetemp' `maxdate' // STATA doesn't always drop temporary objects
 	}
-	else{ // If user specified a date
-		tempvar mindate
-		bys `bys': egen `mindate' = min(`eventdate')
-		bys `bys': egen `maxdate' = max(`eventdate')
-		
-		qui count if `mindate' != `maxdate'
-		local counts = r(N)
-		if `counts' != 0 & "`mevents'" == "" {
-			di "{err}More than one eventdate specified by ID. This warning can be turned off with option mevents."
-			exit
-		}
-		drop `maxdate' `mindate'
-	}
+	
+	// Check that there's at most one event per ID if mevents wasn't specified
+	if "`mevents'" == ""{
+
+		tempvar maxdate mindate
+		if `eventcount' > 0{ // If user specified event
+			tempvar datetemp
+			gen `datetemp' 				= `datevar' if `event' == 1
+			bys `bys': egen `mindate' 		= min(`datetemp')
+			bys `bys': egen `maxdate' 		= max(`datetemp')
 			
+			qui count if `eventdate' != `maxdate'
+			local counts = r(N)
+			if `counts' != 0 {
+				di "{err}More than one event specified by ID. This warning can be turned off with option mevents."
+				exit
+			}
+			drop `datetemp' `mindate' `maxdate' // STATA doesn't always drop temporary objects
+		}
+		else{ // If user specified a date
+			bys `bys': egen `mindate' = min(`eventdate')
+			bys `bys': egen `maxdate' = max(`eventdate')
+			
+			qui count if `mindate' != `maxdate'
+			local counts = r(N)
+			if `counts' != 0 {
+				di "{err}More than one eventdate specified by ID. This warning can be turned off with option mevents."
+				exit
+			}
+			drop `maxdate' `mindate'
+		}
+	}
+	
+	*** II compute days to/from event
 	tempvar datediff
-	qui gen `datediff' 	= `datevar' - `eventdate'
+	if `eventcount' > 0{ // If user specified event
+		
+		preserve
+		tempfile count_events
+		
+		qui keep if `event' == 1
+
+		sort `bys' `datevar'
+		by statenum: gen nvals = _n
+		
+		keep `bys' `datevar' nvals
+		save `count_events'
+		
+		restore
+		
+		qui merge 1:1 `bys' `datevar' using `count_events'  , nogen
+		
+		qui su nvals
+		local max = r(max)
+
+		local varlist
+		
+		gen `datediff' = .
+		
+		forvalues i = 1(1)`max'{
+			tempvar date`i' eventdate`i'
+			qui gen `date`i'' 		= `datevar' if `event' == 1 & nvals == `i'
+			
+			bys `bys': egen `eventdate`i'' 	= min(`date`i'') // column with date of event nr. i by ID
+			
+			qui gen datediff`i' 		= `datevar' - `eventdate`i'' // date difference WRT event date nr. i
+			qui gen datediff`i'_abs 	= abs(datediff`i')
+			
+			local varlist "`varlist' datediff`i'_abs"
+			drop `date`i'' `eventdate`i''
+		}
+
+		tempvar datemin
+		
+		egen `datemin' = rowmin(`varlist')
+		
+		forvalues i = 1(1)`max'{
+			qui replace `datediff' = datediff`i' if datediff`i'_abs == `datemin'
+			drop datediff`i' datediff`i'_abs
+		}
+		
+		drop `datemin' nvals
+	}
+	else { // If user provided an eventvar
+		qui gen `datediff' = `datevar' - `eventdate'
+	}
+	
+	*** III Generate periods to/from variables
+	// Set name for new variable
+	if "`name'" == ""{
+		local name epoch
+	}
 	
 	if "`symmetric'" == "" { // t-0 covers [0,periods) 
 		qui gen `name' = 0 if (`datediff' >= 0 & `datediff' <= `periods'-1)
