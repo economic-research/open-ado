@@ -1,7 +1,14 @@
 program define eventin , rclass
-syntax , idvar(varlist) datevar(varlist) event(varlist) periods(string) name(string)
+syntax , idvar(varlist min=1 max=1) datevar(varlist min=1 max=1) event(varlist min=1 max=1) periods(string) name(string)
 
 	**** I Checks
+	// Verify that tsperiods is installed
+	capture findfile tsperiods.ado
+	if "`r(fn)'" == "" {
+		 di as txt "user-written package tsperiods needs to be installed first;"
+		 exit 498
+	}
+	
 	// Check that user provided a valid panel
 	tempvar nvals
 	bys `idvar' `datevar': gen `nvals' = _n
@@ -9,6 +16,17 @@ syntax , idvar(varlist) datevar(varlist) event(varlist) periods(string) name(str
 	local counts = r(N)
 	if `counts' > 0 {
 		di "{err}`idvar' and `datevar' do not uniquely identify observations"
+		exit
+	}
+	
+	// Verify that periods is a positive integer
+	if `periods' <= 0{
+		di "{err}periods has to be a positive integer"
+		exit
+	}
+	
+	if `periods' != int(`periods'){
+		di "{err}periods has to be an integer"
 		exit
 	}
 	
@@ -22,54 +40,22 @@ syntax , idvar(varlist) datevar(varlist) event(varlist) periods(string) name(str
 		di "{err}Event dummy can only have 0, 1 values"
 		exit 175
 	}
-
-	// Check that pend > pstart
-	if `pstart' >= `pend'{
-		di "{err}Verify that pend > pstart"
-		exit
-	}
-
-	// Check that pend < 0
-	if `pend' >= 0{
-		di "{err}pend must be a negative integer"
-		exit
-	}
-
+	
 	**** II Build variable
-	// Compute date of events for each ID
-	preserve
-	tempfile count_events
-
-	qui keep if `event' == 1
-
+	qui gen tempval = 0
+	
 	sort `idvar' `datevar'
 	
-	by `idvar': gen datediff = `datevar' - `datevar'[_n-1]
-	by `idvar': gen nvals 	 = _n
-	
-	keep `idvar' `datevar' datediff
-	save `count_events'
-
-	restore
-
-	qui merge 1:1 `idvar' `datevar' using `count_events'  , nogen
-
-	tsperiods , bys(`idvar') datevar(`datevar') maxperiods(1) ///
-			periods(`periods') event(`event') mevents name(myevent)
-
-	qui su nvals
-	local max = r(max)
-	
-	forvalues i = 1(1)`max'{
-		tempvar date`i' datediff`i' 
-		qui gen `date`i'' 		= `datevar' if `event' == 1 & nvals == `i'
-		qui gen `datediff`i'' 		= `datevar' - `datediff`i''
-		
-		bys `idvar': egen `eventdate`i'' = min(`date`i'') // column with date of event nr. i by ID
-		qui gen `datediff`i''  = `datevar' - `eventdate`i''
-		
-		qui replace `name' = 1 if (`datediff`i'' < `pend' & `datediff`i'' >= `pstart')
+	forvalues i = 1(1)`periods'{
+		by `idvar': replace tempval = tempval + `event'[_n-`i']
 	}
 	
-	qui gen `name' = 0
+	tsperiods , bys(`idvar') datevar(`datevar') maxperiods(`periods') ///
+		periods(1) event(`event') mevents name(myevent)
+	
+	qui gen `name' = 0 
+	qui replace `name' = 1 if (tempval >= 2 & myevent > 0 & !missing(tempval) & !missing(myevent))
+	qui replace `name' = 1 if (tempval >= 1 & my event <= 0 & !missing(tempval) & !missing(myevent))
+	
+	qui drop tempval myevent
 end

@@ -16,6 +16,17 @@ program define tsperiods , rclass
 		exit
 	}
 	
+	// Verify that periods is a positive integer
+	if `periods' <= 0{
+		di "{err}periods has to be a positive integer"
+		exit
+	}
+	
+	if `periods' != int(`periods'){
+		di "{err}periods has to be an integer"
+		exit
+	}
+	
 	// Confirm if user specified eventdate
 	local datecount = 0
 	foreach var in `eventdate'{
