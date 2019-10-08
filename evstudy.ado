@@ -64,7 +64,7 @@ version 14
 		local cluster "cl(`cl')"
 	}
 	
-	// Define capture
+	// Define capture (for use with force option)
 	if "`force'" == "force"{
 		if "`generate'" == ""{
 			di "{err}Option force can only be specified with option generate"
