@@ -38,6 +38,8 @@ program define values2ascii , rclass
 			qui replace `var' = subinstr(`var',"[","",.)
 			qui replace `var' = subinstr(`var',"]","",.)
 			qui replace `var' = subinstr(`var',"-","",.)
+			qui replace `var' = subinstr(`var',"@","",.)
+			qui replace `var' = subinstr(`var',"_","",.)
 		}
 	}
 	
