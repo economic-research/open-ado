@@ -12,6 +12,13 @@ version 14
 		 exit 498
 	}
 	
+	// Verify that tsperiods is installed
+	capture findfile regsave.ado
+	if "`r(fn)'" == "" {
+		 di as txt "user-written package regsave needs to be installed first;"
+		 exit 498
+	}
+	
 	// Check if absorb is empty
 	local abscount = 0
 	foreach var in `absorb'{
