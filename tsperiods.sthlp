@@ -20,7 +20,7 @@ where
 {cmd:bys} list of variables that constitute an ID.
 
 {p 8 16 2}
-{cmd:datevar} is a date variable
+{cmd:datevar} is a date variable. {cmd:tsperiods} works with daily and monthly data.
 
 {p 8 16 2}
 {cmd:maxperiods} the maximum number of epochs to be considered

@@ -116,7 +116,7 @@ program define tsperiods , rclass
 		qui keep if `event' == 1
 
 		sort `bys' `datevar'
-		by `bys': gen nvals = _n
+		by `bys': gen nvals = _n // identifies order of events within panel ID
 		
 		keep `bys' `datevar' nvals
 		save `count_events'
