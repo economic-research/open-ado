@@ -139,9 +139,9 @@ version 14
 		
 		tempvar days post
 		qui gen `days' 		= _n
-		qui replace `days' 	= `days' - `periods'
+		qui replace `days' 	= `days' - `periods' - 1
 		
-		qui gen `post' 		= (`days' > -1)
+		qui gen `post' 		= (`days' >= 0)
 		
 		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
 			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
