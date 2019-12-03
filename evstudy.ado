@@ -1,10 +1,12 @@
 program evstudy , rclass
 version 14
-	syntax varlist , basevar(string) file(string) periods(string) ///
-		tline(string) varstem(varlist min=1 max=1)  [absorb(varlist) ///
+	syntax varlist , basevar(string) periods(string) ///
+		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
-		force generate kernel kopts(string) mevents qui othervar(varlist min=2 max=2)]
+		file(string) force generate leftperiods(string) kernel kopts(string) mevents qui ///
+		othervar(varlist min=2 max=2) tline(string)]
 	
+	*----------------------- Checks ---------------------------------------------
 	// Verify that tsperiods is installed
 	capture findfile tsperiods.ado
 	if "`r(fn)'" == "" {
@@ -57,6 +59,8 @@ version 14
 		}
 	}
 	
+	*----------------------- Checks ---------------------------------------------
+	
 	// Create local for absorb
 	if `abscount' >0{
 		local abslocal "absorb(`absorb')"
@@ -80,9 +84,22 @@ version 14
 		local capture cap
 	}
 	
+	// Define tline if one is specified
+	if "`tline'" != "" {
+		local tlineval "tline(`tline', lp(solid) lc(red))"
+	}
+	
+	// Define periods to the left, if specified
+	if "`leftperiods'" == "" {
+		local leftperiods = `periods'
+	}
+	
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
-		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`periods') ///
+	
+		local maxperiods = max(`periods', `leftperiods')
+
+		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
 			periods(1) event(`varstem') `mevents' name(myevent)
 			
 		// Prevent STATA from storing myevent variable 
@@ -90,10 +107,11 @@ version 14
 		qui gen `myevent' = myevent
 		qui drop myevent
 			
-		forvalues i = 1(1)`periods'{
+		forvalues i = 1(1)`leftperiods' {
 			`capture' gen `varstem'_f`i' = (`myevent' == -`i')
 			label variable `varstem'_f`i' "t-`i'"
-			
+		}
+		forvalues i = 1(1)`periods' {
 			`capture' gen `varstem'_l`i' = (`myevent' == `i')
 			label variable `varstem'_l`i' "t+`i'"
 		}
@@ -111,7 +129,7 @@ version 14
 		local regressors "`regressors' `1'"
 	}
 	
-	forvalues i = `periods'(-1)1{
+	forvalues i = `leftperiods'(-1)1{
 		local conditions "`conditions' (`varstem'_f`i':_b[`varstem'_f`i']-_b[`basevar'])"
 		local regressors "`regressors' `varstem'_f`i'"
 	}
@@ -146,14 +164,16 @@ version 14
 		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
 			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
 			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
-			(lpoly coef `days' if `post', tline(`tline', lc(red)) lcolor(cranberry) `kopts') , legend(off)
+			(lpoly coef `days' if `post', `tlineval' lcolor(cranberry) `kopts') , legend(off)
 		
 		restore
 	}
 	else {
 		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) tline(`tline', lp(solid) lc(red)) xsize(8)
+		graphregion(color(white)) `tlineval' xsize(8)
 	}
 	
-	graph2 , file("`file'") `debug'
+	if "`file'" != "" {
+		graph2 , file("`file'") `debug'
+	}
 end
