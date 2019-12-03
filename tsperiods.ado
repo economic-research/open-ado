@@ -78,13 +78,13 @@ program define tsperiods , rclass
 	if "`mevents'" == ""{
 
 		tempvar maxdate mindate
-		if `eventcount' > 0{ // If user specified event
+		if `eventcount' > 0{ // If user specified an event
 			tempvar datetemp
-			gen `datetemp' 				= `datevar' if `event' == 1
+			gen `datetemp' 					= `datevar' if `event' == 1
 			bys `bys': egen `mindate' 		= min(`datetemp')
 			bys `bys': egen `maxdate' 		= max(`datetemp')
 			
-			qui count if `eventdate' != `maxdate'
+			qui count if `mindate' != `maxdate'
 			local counts = r(N)
 			if `counts' != 0 {
 				di "{err}More than one event specified by ID. This warning can be turned off with option mevents."
