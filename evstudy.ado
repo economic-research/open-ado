@@ -149,6 +149,20 @@ version 14
 	}
 	
 	`qui' reghdfe `varlist' `regressors' , `abslocal' `cluster'
+	
+	// Check if any variables were omitted
+	local numcoef = `periods' + `leftperiods' + 1
+	
+	forvalues i = 1(1)`numcoef'{
+		if !missing(r(label`i')) {
+			if r(label`i') == "(omitted)"{
+				di "{err}One or more coefficients were omitted"
+				exit
+			}
+		}
+	}
+	
+	// Normalize coefficients
 	`qui' nlcom `conditions' , post
 	
 	if "`kernel'" == "kernel"{
@@ -170,7 +184,7 @@ version 14
 	}
 	else {
 		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) `tlineval' xsize(8)
+		graphregion(color(white)) `tlineval' xsize(8) recast(connected)
 	}
 	
 	if "`file'" != "" {
