@@ -3,8 +3,8 @@ version 14
 	syntax varlist , basevar(string) periods(string) ///
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
-		file(string) force generate leftperiods(string) kernel kopts(string) mevents qui ///
-		othervar(varlist min=2 max=2) tline(string)]
+		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
+		othervar(varlist min=2 max=2) qui tline(string)]
 	
 	*----------------------- Checks ---------------------------------------------
 	// Verify that tsperiods is installed
