@@ -6,12 +6,13 @@ help for {hi:evstudy}
 
 {title:evstudy} - A module that performs an event study analysis. Can use {it:{help project##project:project}} functionality.
 
-{p 8 16 2}{cmd:evstudy} {cmd:varlist} , {cmdab:basevar:(}{it:string}{cmd:)} {cmdab:file:(}{it:string}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-{cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:varstem:(}{it:string}{cmd:)} 
+{p 8 16 2}{cmd:evstudy} {cmd:varlist} , {cmdab:basevar:(}{it:string}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
+{cmdab:varstem:(}{it:string}{cmd:)} 
 [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
-{cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:force} {cmdab:generate} {cmdab:kernel} {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:mevents} {cmdab:qui}
-{cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)}]
-
+{cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:file:(}{it:string}{cmd:)} {cmdab:force} {cmdab:generate} {cmdab:kernel} 
+{cmdab:kopts:(}{it:string}{cmd:)} {cmdab:leftperiods:(}{it:integer}{cmd:)} {cmdab:mevents} {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} 
+{cmdab:qui} {cmdab:tline:(}{it:numeric}{cmd:)}]
+ 
 {p 4 4 2}
 where
 
@@ -60,6 +61,9 @@ It generates a sequence of variables of the type: {it:varstem_f`periods',..., va
 
 {p 8 16 2}
 {cmd:kopts} {it:{help lpoly##lpoly:lpoly}} options.
+
+{p 8 16 2}
+{cmd:lefperiods} optionally specify the number of periods before the event that are considered.
 
 {p 8 16 2}
 {cmd:mevents} by default {cmd:evstudy} checks if there's a maximum of 1 events per ID. {cmd:mevents} (multiple events) turns off this warning.
