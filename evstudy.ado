@@ -176,9 +176,9 @@ version 14
 		qui gen `post' 		= (`days' >= 0)
 		
 		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
-			(lpoly coef `days' if !`post', lcolor(navy) `kopts') ///
+			(lpolyci coef `days' if !`post', lcolor(navy) ciplot(rline) `kopts') ///
 			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
-			(lpoly coef `days' if `post', `tlineval' lcolor(cranberry) `kopts') , legend(off)
+			(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , legend(off)
 		
 		restore
 	}
