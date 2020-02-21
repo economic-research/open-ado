@@ -1,10 +1,10 @@
 program evstudy , rclass
 version 14
-	syntax varlist , basevar(string) periods(string) ///
+	syntax varlist [if], basevar(string) periods(string) ///
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
-		othervar(varlist min=2 max=2) qui tline(string)]
+		othervar(varlist min=2 max=2) qui tline(string) twopts(string)]
 	
 	*----------------------- Checks ---------------------------------------------
 	// Verify that tsperiods is installed
@@ -68,7 +68,6 @@ version 14
 	else {
 		local abslocal "noabsorb"
 	}
-	
 	
 	// Define cluster variable
 	if `clcount' > 0 {
@@ -148,7 +147,7 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	`qui' reghdfe `varlist' `regressors' , `abslocal' `cluster'
+	`qui' reghdfe `varlist' `regressors' `if', `abslocal' `cluster'
 	
 	// Check if any variables were omitted
 	local numcoef = `periods' + `leftperiods' + 1
@@ -163,7 +162,7 @@ version 14
 	}
 	
 	// Normalize coefficients
-	`qui' nlcom `conditions' , post
+	`qui' nlcom `conditions', post
 	
 	if "`kernel'" == "kernel"{
 		preserve
@@ -178,13 +177,14 @@ version 14
 		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
 			(lpolyci coef `days' if !`post', lcolor(navy) ciplot(rline) `kopts') ///
 			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
-			(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , legend(off)
+			(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , ///
+			legend(off) `twopts'
 		
 		restore
 	}
 	else {
 		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) `tlineval' xsize(8) recast(connected)
+		graphregion(color(white)) `tlineval' xsize(8) recast(connected) `twopts'
 	}
 	
 	if "`file'" != "" {
