@@ -11,7 +11,7 @@ help for {hi:evstudy}
 [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
 {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:file:(}{it:string}{cmd:)} {cmdab:force} {cmdab:generate} {cmdab:kernel} 
 {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:leftperiods:(}{it:integer}{cmd:)} {cmdab:mevents} {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} 
-{cmdab:qui} {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:twopts:(}{it:string}{cmd:)}]
+{cmdab:qui} (cmdab:regopts:(}{it:string}{cmd:)} {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:twopts:(}{it:string}{cmd:)}]
  
 {p 4 4 2}
 where
@@ -70,6 +70,9 @@ It generates a sequence of variables of the type: {it:varstem_f`periods',..., va
 
 {p 8 16 2}
 {cmd:qui} supress regression output.
+
+{p 8 16 2}
+{cmd:regopts} options for reghdfe
 
 {p 8 16 2}
 {cmd:othervar} can accept two additional variable that are included at the extreme left and right in the plot respectively. Useful when one wants to include dummies that include every period before/after t-X/t+X respectively.

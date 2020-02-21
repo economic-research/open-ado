@@ -4,7 +4,8 @@ version 14
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
-		othervar(varlist min=2 max=2) qui tline(string) twopts(string)]
+		othervar(varlist min=2 max=2) qui  ///
+		regopts(string) tline(string) twopts(string)]
 	
 	*----------------------- Checks ---------------------------------------------
 	// Verify that tsperiods is installed
@@ -147,7 +148,7 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	`qui' reghdfe `varlist' `regressors' `if', `abslocal' `cluster'
+	`qui' reghdfe `varlist' `regressors' `if', `abslocal' `cluster' `regopts'
 	
 	// Check if any variables were omitted
 	local numcoef = `periods' + `leftperiods' + 1
