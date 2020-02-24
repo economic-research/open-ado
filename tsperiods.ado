@@ -1,9 +1,9 @@
 program define tsperiods , rclass
 	version 14
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
-		maxperiods(string) periods(string) ///
+		periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		mevents name(string) symmetric]
+		maxperiods(string) mevents name(string) symmetric]
 	
 	*** I Checks
 	// Check that user provided a valid panel
@@ -28,15 +28,28 @@ program define tsperiods , rclass
 	}
 	
 	// Confirm if user specified eventdate
+	tempvar anyevent
+	
 	local datecount = 0
 	foreach var in `eventdate'{
 		local `datecount++'
+		
+		// Used for checking whether all `bys' have at least one event
+		tempvar eventdatetemp
+		qui gen `eventdatetemp' 	= 0
+		qui replace `eventdatetemp' = 1 if !missing(`eventdate')
+		
+		by `bys': egen `anyevent' = max(`eventdatetemp')
+		drop `eventdatetemp'
 	}
 	
 	// Confirm is user specified an event
 	local eventcount = 0
 	foreach var in `event'{
 		local `eventcount++'
+		
+		// Used for checking whether all `bys' have at least one event
+		by `bys': egen `anyevent' = max(`event')
 	}
 	
 	// Check whether no event or eventdate were specified
@@ -166,6 +179,38 @@ program define tsperiods , rclass
 		local name epoch
 	}
 	
+	// If user didn't select maxperiods, compute optimal number
+	// works optimally if panel is balanced
+	
+	if "`maxperiods'" == "" {
+		local maxperiods_selected "FALSE"
+	}
+	else {
+		local maxperiods_selected "TRUE"
+	}
+	
+	if "`maxperiods_selected'" == "FALSE" {
+		local j 		= 1
+		local counts 	= 99 
+		
+		while `counts' > 0 {
+			qui count if (`datediff' >= -`j'*`periods' ///
+					& `datediff' <= -`periods'*(`j' - 1) - 1)
+			
+			local total = r(N)
+			
+			qui count if (`datediff' >= `j' * `periods' ///
+						& `datediff' <= `periods' * (`j'+1) - 1)
+			
+			local counts = `total' + r(N)
+			local `j++'
+		}
+		
+		local maxperiods = `j' + 1
+		
+		di as error "Consider specifying maxperiods if you believe the panel is unbalanced"
+	}
+	
 	if "`symmetric'" == "" { // t-0 covers [0,periods) 
 		qui gen `name' = 0 if (`datediff' >= 0 & `datediff' <= `periods'-1)
 		
@@ -194,5 +239,32 @@ program define tsperiods , rclass
 			}
 	}
 	
-	drop `datediff' 
+	// Check that epoch has no missing values and provide guidance as to why that would be the case
+	qui count if missing(`name')
+	local missing_epoch = r(N)
+		
+	qui count if missing(`name') & `anyevent' == 0
+	local missing_epoch_no_event = r(N)
+	
+	if `missing_epoch' > 0 {
+		di as error "`missing_epoch' missing values in `name' detected."
+		if "`maxperiods_selected'" == "FALSE" {
+			if `missing_epoch' == `missing_epoch_no_event' {
+				di as error "This is caused by one or more `bys' that do not have any event"
+			}
+			else {
+				di "{err} Unknown error caused `name' to have missing values"
+			}
+		}
+		if  "`maxperiods_selected'" == "TRUE" {
+			if `missing_epoch' == `missing_epoch_no_event' {
+				di as error "This is caused by one or more `bys' that do not have any event"
+			}
+		else {
+			di as error "Consider increasing maxperiods"
+			}
+		}
+	}
+	
+	drop `datediff' `anyevent'
 end

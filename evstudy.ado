@@ -96,9 +96,8 @@ version 14
 	
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
-	
+		
 		local maxperiods = max(`periods', `leftperiods')
-
 		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
 			periods(1) event(`varstem') `mevents' name(myevent)
 			
