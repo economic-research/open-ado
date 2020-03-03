@@ -117,7 +117,7 @@ version 14
 		if "`overlap'" != "" {
 			capture confirm variable overlap // check if overlap was already defined
 			
-			if _rc != 0 { // If variable overlap doesn't exist, create it
+			if !_rc { // If variable overlap doesn't exist, create it
 				local overlaploc "overlap(`overlap')"
 			}
 		}
