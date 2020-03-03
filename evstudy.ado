@@ -5,7 +5,7 @@ version 14
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
 		othervar(varlist min=2 max=2) overlap(string) qui  ///
-		regopts(string) tline(string) twopts(string)]
+		regopts(string) tline(string) surround twopts(string)]
 	
 	*----------------------- Checks ---------------------------------------------
 	// Verify that tsperiods is installed
@@ -77,6 +77,12 @@ version 14
 		}
 	}
 	
+	if "`kernel'" == "kernel" {
+		if "`surround'" == "surround" | `othervarcount' > 0 {
+			di as error "`surround' `othervar' will be included in estimation but the coefficients will NOT be ploted"
+		}
+	}
+	
 	*----------------------- Checks ---------------------------------------------
 	
 	// Create local for absorb
@@ -117,13 +123,24 @@ version 14
 		if "`overlap'" != "" {
 			capture confirm variable overlap // check if overlap was already defined
 			
-			if !_rc { // If variable overlap doesn't exist, create it
+			if  _rc { // If variable overlap doesn't exist, create it
 				local overlaploc "overlap(`overlap')"
 			}
 		}
 		
-		local maxperiods = max(`periods', `leftperiods')
+		// Compute the absolute maximum number of leads and lags that we could need
+		tempvar counts maxcounts
 		
+		bys `bys': gen `counts' 	= _n
+		by `bys' : egen `maxcounts' = max(`counts')
+		
+		qui su `maxcounts'
+		
+		local maxperiods = r(max)
+		
+		drop `counts' `maxcounts'
+		
+		// Construct periods to/from event
 		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
 			periods(1) event(`varstem') `mevents' name(myevent) `overlaploc'
 			
@@ -140,6 +157,16 @@ version 14
 			`capture' gen `varstem'_l`i' = (`myevent' == `i')
 			label variable `varstem'_l`i' "t+`i'"
 		}
+		
+		// Create variables for pre and postperiods if surround was selected
+		if "`surround'" == "surround" {
+			`capture' gen `varstem'_pre = (`myevent' < -`leftperiods')
+			label variable `varstem'_pre "t--"
+			
+			`capture' gen `varstem'_post = (`myevent' > `periods')
+			label variable `varstem'_post "t++"
+		}
+		
 		qui drop `myevent'
 	}
 	
@@ -155,8 +182,21 @@ version 14
 	// Leads of the RHS correspond to "pre-trend" = before treatment
 	if `othervarcount' > 0 {
 		tokenize `othervar'
-		local conditions "`conditions' (`1': _b[`1'] - _b[`basevar'])"
+		
+		if "`kernel'" == "" { // Only include in graph if kernel was not selected
+			local conditions "`conditions' (`1': _b[`1'] - _b[`basevar'])"
+		}
+		
 		local regressors "`regressors' `1'"
+	}
+	
+	// Include pre and post controls if selected
+	if "`surround'" == "surround" {
+		
+		if "`kernel'" == "" { // Only include in graph if kernel was not selected
+			local conditions "`conditions' (`varstem'_pre: _b[`varstem'_pre] - _b[`basevar'])"
+		}
+		local regressors "`regressors' `varstem'_pre"
 	}
 	
 	forvalues i = `leftperiods'(-1)1{
@@ -167,14 +207,27 @@ version 14
 	local conditions "`conditions' (`varstem':_b[`varstem']-_b[`basevar'])"
 	local regressors "`regressors' `varstem'"
 	
-	// Lags correspond to = after treatment
+	// Lags correspond to "post-trends" = after treatment
 	forvalues i = 1(1)`periods'{
 		local conditions "`conditions' (`varstem'_l`i':_b[`varstem'_l`i']-_b[`basevar'])"
 		local regressors "`regressors' `varstem'_l`i'"
 	}
 	
+	// Include pre and post controls if selected
+	if "`surround'" == "surround" {
+		
+		if "`kernel'" == "" { // Only include in graph if kernel was not selected
+			local conditions "`conditions' (`varstem'_post: _b[`varstem'_post] - _b[`basevar'])"
+		}
+		local regressors "`regressors' `varstem'_post"
+	}
+	
 	if `othervarcount' > 0 {
-		local conditions "`conditions' (`2':_b[`2']-_b[`basevar'])"
+		
+		if "`kernel'" == "" { // Only include in graph if kernel was not selected
+			local conditions "`conditions' (`2':_b[`2']-_b[`basevar'])"
+		}
+		
 		local regressors "`regressors' `2'"
 	}
 	
