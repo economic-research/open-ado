@@ -8,9 +8,9 @@ help for {hi:tsperiods}
 
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
-{cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
-{cmdab:name:(}{it:string}{cmd:)} {cmd:symmetric}]
+{cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:var}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
+[{cmdab:event:(}{it:var}{cmd:)} {cmdab:eventdate:(}{it:var}{cmd:)} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
+{cmdab:name:(}{it:string}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)} {cmd:symmetric}]
 
 {cmd:tsperiods} returns a new variabled called {it:epoch}, unless {cmd:name} is specified
 
@@ -40,6 +40,9 @@ where
 
 {p 8 16 2}
 {cmd:name} of new variable created. If no name is specified, the resulting variable is called {it:epoch}.
+
+{p 8 16 2}
+{cmd:overlap} generate dummy if epoch overlap with respect to the previous event. Can only be specified with {cmd:mevents}.
 
 {p 8 16 2}
 {cmd:symmetric} by default {cmd:tsperiods} constructs epoch as follows (consider the case of t-0): [0,periods). If symmetric is specified then t-0 is constructed as [-periods/2, periods/2].

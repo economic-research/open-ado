@@ -4,7 +4,7 @@ version 14
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
-		othervar(varlist min=2 max=2) qui  ///
+		othervar(varlist min=2 max=2) overlap(string) qui  ///
 		regopts(string) tline(string) twopts(string)]
 	
 	*----------------------- Checks ---------------------------------------------
@@ -60,6 +60,23 @@ version 14
 		}
 	}
 	
+	// If user specified overlap, check if user also specified mevents
+	if "`overlap'" != "" & "`mevents'" == "" {
+		di "{err}Need to specify 'mevents' if 'overlap' is specified"
+		exit
+	
+		// Verify that periods is a positive integer
+		if `overlap' <= 0{
+			di "{err}overlap has to be a positive integer"
+			exit
+		}
+		
+		if `overlap' != int(`periods'){
+			di "{err}overlap has to be an integer"
+			exit
+		}
+	}
+	
 	*----------------------- Checks ---------------------------------------------
 	
 	// Create local for absorb
@@ -97,9 +114,18 @@ version 14
 	// Optionally build leads and lags
 	if "`generate'" == "generate"{
 		
+		if "`overlap'" != "" {
+			capture confirm variable overlap // check if overlap was already defined
+			
+			if !_rc { // If variable overlap doesn't exist, create it
+				local overlaploc "overlap(`overlap')"
+			}
+		}
+		
 		local maxperiods = max(`periods', `leftperiods')
+		
 		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
-			periods(1) event(`varstem') `mevents' name(myevent)
+			periods(1) event(`varstem') `mevents' name(myevent) `overlaploc'
 			
 		// Prevent STATA from storing myevent variable 
 		tempvar myevent
@@ -115,6 +141,11 @@ version 14
 			label variable `varstem'_l`i' "t+`i'"
 		}
 		qui drop `myevent'
+	}
+	
+	// Include control for overlap if user specified it
+	if "`overlap'" != "" {
+		local overlapctrl "overlap"
 	}
 	
 	// Build regression parameters in loop
@@ -147,7 +178,8 @@ version 14
 		local regressors "`regressors' `2'"
 	}
 	
-	`qui' reghdfe `varlist' `regressors' `if', `abslocal' `cluster' `regopts'
+	// ------------------------ Regression -----------------------------------------
+	`qui' reghdfe `varlist' `regressors' `overlapctrl' `if', `abslocal' `cluster' `regopts'
 	
 	// Check if any variables were omitted
 	local numcoef = `periods' + `leftperiods' + 1
