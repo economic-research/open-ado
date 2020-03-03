@@ -3,7 +3,7 @@ program define tsperiods , rclass
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		maxperiods(string) mevents name(string) symmetric]
+		maxperiods(string) mevents name(string) overlap(string) symmetric]
 	
 	*** I Checks
 	// Check that user provided a valid panel
@@ -43,7 +43,7 @@ program define tsperiods , rclass
 		drop `eventdatetemp'
 	}
 	
-	// Confirm is user specified an event
+	// Confirm if user specified an event
 	local eventcount = 0
 	foreach var in `event'{
 		local `eventcount++'
@@ -117,6 +117,12 @@ program define tsperiods , rclass
 			}
 			drop `maxdate' `mindate'
 		}
+	}
+	
+	// If user specified overlap, check if user also specified mevents
+	if "`overlap'" != "" & "`mevents'" == "" {
+		di "{err}Need to specify 'mevents' if 'overlap' is specified"
+		exit
 	}
 	
 	*** II compute days to/from event
@@ -239,6 +245,38 @@ program define tsperiods , rclass
 			}
 	}
 	
+	// If mevents was selected compute overlapping windows and generate event-ID indicators
+	if "`mevents'" == "mevents" {
+		tempvar diff startevent
+		
+		sort `bys' `datevar'
+		
+		by `bys': gen `diff' = `name' - `name'[_n-1]
+		
+		qui gen `startevent' 		= (`diff' < 0)
+		by `bys': gen eventnr 		= sum(`startevent')
+		
+		if "`overlap'" != "" { // If user specified an overlap window generate dummy for overlap
+			tempvar startepoch prevmaxepoch epochs2prev_event
+			
+			// Identify starting epoch for each event-ID
+			bys `bys' eventnr: egen `startepoch' 	= min(`name') // start epoch for event-ID
+			
+			// Identify end epoch of previous event-ID 
+			qui gen `prevmaxepoch' = abs(`startepoch') - 1
+			
+			// Compute number of epochs since last event
+			qui gen `epochs2prev_event' = `prevmaxepoch' + (`name' - `startepoch') + 1
+			
+			// Generate indicator variable for overlapping periods
+			qui gen overlap = (`epochs2prev_event' <= `overlap' & eventnr != 0)
+			
+			drop `startepoch' `prevmaxepoch' `epochs2prev_event'
+		}
+		
+		drop `diff' `startevent'
+	}
+	
 	// Check that epoch has no missing values and provide guidance as to why that would be the case
 	qui count if missing(`name')
 	local missing_epoch = r(N)
@@ -267,4 +305,6 @@ program define tsperiods , rclass
 	}
 	
 	drop `datediff' `anyevent'
+	
+	sort `bys' `datevar' 
 end
