@@ -123,6 +123,17 @@ program define tsperiods , rclass
 	if "`overlap'" != "" & "`mevents'" == "" {
 		di "{err}Need to specify 'mevents' if 'overlap' is specified"
 		exit
+	
+		// Verify that periods is a positive integer
+		if `overlap' <= 0{
+			di "{err}overlap has to be a positive integer"
+			exit
+		}
+		
+		if `overlap' != int(`periods'){
+			di "{err}overlap has to be an integer"
+			exit
+		}
 	}
 	
 	*** II compute days to/from event

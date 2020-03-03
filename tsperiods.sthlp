@@ -8,9 +8,9 @@ help for {hi:tsperiods}
 
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
-{cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-[{cmdab:event:(}{it:varlist}{cmd:)} {cmdab:eventdate:(}{it:varlist}{cmd:)} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
-{cmdab:name:(}{it:string}{cmd:)} {cmd:symmetric}]
+{cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:var}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
+[{cmdab:event:(}{it:var}{cmd:)} {cmdab:eventdate:(}{it:var}{cmd:)} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
+{cmdab:name:(}{it:string}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)} {cmd:symmetric}]
 
 {cmd:tsperiods} returns a new variabled called {it:epoch}, unless {cmd:name} is specified
 
