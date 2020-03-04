@@ -3,7 +3,8 @@ version 14
 	syntax varlist [if], basevar(string) periods(string) ///
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
-		file(string) force generate kernel kopts(string) leftperiods(string) mevents ///
+		file(string) force generate kernel kopts(string) leftperiods(string) ///
+		maxperiods(string) mevents ///
 		othervar(varlist min=2 max=2) overlap(string) qui  ///
 		regopts(string) tline(string) surround twopts(string)]
 	
@@ -11,15 +12,24 @@ version 14
 	// Verify that tsperiods is installed
 	capture findfile tsperiods.ado
 	if "`r(fn)'" == "" {
-		 di as txt "user-written package tsperiods needs to be installed first;"
+		 di as error "user-written package tsperiods needs to be installed first;"
 		 exit 498
 	}
 	
 	// Verify that tsperiods is installed
 	capture findfile regsave.ado
 	if "`r(fn)'" == "" {
-		 di as txt "user-written package regsave needs to be installed first;"
+		 di as error "user-written package regsave needs to be installed first;"
 		 exit 498
+	}
+	
+	// Verify that no variable called 'myevent' exists
+	if "`generate'" == "generate" {
+		capture confirm variable myevent
+		if !_rc {
+			di "{err}Please drop variable 'myevent'. Evstudy uses this object to temporary store information"
+			exit
+		}
 	}
 	
 	// Check if absorb is empty
@@ -77,14 +87,24 @@ version 14
 		}
 	}
 	
+	// Warn user that in kernel graphs only time coefficients are plotted
 	if "`kernel'" == "kernel" {
 		if "`surround'" == "surround" | `othervarcount' > 0 {
 			di as error "`surround' `othervar' will be included in estimation but the coefficients will NOT be ploted"
 		}
 	}
 	
+	// Verify that periods is a positive integer
+	if "`maxperiods'" != "" {
+		if `maxperiods' <= 0{
+			di "{err}overlap has to be a positive integer"
+			exit
+		}
+	}
+	
 	*----------------------- Checks ---------------------------------------------
 	
+	*----------------------- Definitions ----------------------------------------
 	// Create local for absorb
 	if `abscount' >0{
 		local abslocal "absorb(`absorb')"
@@ -99,12 +119,9 @@ version 14
 	}
 	
 	// Define capture (for use with force option)
-	if "`force'" == "force"{
-		if "`generate'" == ""{
-			di "{err}Option force can only be specified with option generate"
-			exit
-		}
-		local capture cap
+	if "`force'" == "force" & "`generate'" == ""{
+		di "{err}Option force can only be specified with option generate"
+		exit
 	}
 	
 	// Define tline if one is specified
@@ -112,63 +129,123 @@ version 14
 		local tlineval "tline(`tline', lp(solid) lc(red))"
 	}
 	
-	// Define periods to the left, if specified
+	// Define periods to the left, if not specified
 	if "`leftperiods'" == "" {
 		local leftperiods = `periods'
-	}
-	
+	}	
+	*----------------------- Definitions ----------------------------------------
+
+	*----------------------- Generate variables----------------------------------
 	// Optionally build leads and lags
-	if "`generate'" == "generate"{
+	if "`generate'" == "generate"{ // BEGIN GENERATE LEADS AND LAGS
 		
-		if "`overlap'" != "" {
+		if "`overlap'" != "" { // If overlap was specified
 			capture confirm variable overlap // check if overlap was already defined
+			
+			if "`force'" == "" { // If option force was not specified and variable overlap exists throw error
+				if !_rc {
+					di "{err}Variable 'overlap' is already defined."
+					di "{err}Option 1: drop variable 'overlap'."
+					di "{err}Option 2: omit 'generate' option."
+					di "{err}Option 3: specify 'force option'."
+					exit
+				}
+			}
 			
 			if  _rc { // If variable overlap doesn't exist, create it
 				local overlaploc "overlap(`overlap')"
 			}
 		}
 		
-		// Compute the absolute maximum number of leads and lags that we could need
-		tempvar counts maxcounts
+		// Determine if it's necessary to generate periods dummies or not
+		// Check whether user specified 'generate', but not 'force', and still the variable exists
+		local period_dummies_required "FALSE"
 		
-		bys `bys': gen `counts' 	= _n
-		by `bys' : egen `maxcounts' = max(`counts')
-		
-		qui su `maxcounts'
-		
-		local maxperiods = r(max)
-		
-		drop `counts' `maxcounts'
-		
-		// Construct periods to/from event
-		tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
-			periods(1) event(`varstem') `mevents' name(myevent) `overlaploc'
-			
-		// Prevent STATA from storing myevent variable 
-		tempvar myevent
-		qui gen `myevent' = myevent
-		qui drop myevent
-			
 		forvalues i = 1(1)`leftperiods' {
-			`capture' gen `varstem'_f`i' = (`myevent' == -`i')
-			label variable `varstem'_f`i' "t-`i'"
+			capture confirm variable `varstem'_f`i'
+				
+			if _rc { // If it doesn't exist flag to generate
+				local period_dummies_required "TRUE"
+			}
+			else if "`force'" == ""{
+				di "{err}Variable `varstem'_f`i' already specified"
+				exit
+			}
 		}
+		
 		forvalues i = 1(1)`periods' {
-			`capture' gen `varstem'_l`i' = (`myevent' == `i')
-			label variable `varstem'_l`i' "t+`i'"
+			capture confirm variable `varstem'_l`i'
+				
+			if _rc { // If it doesn't exist flag to generate
+				local period_dummies_required "TRUE"
+			}
+			else if "`force'" == ""{
+				di "{err}Variable `varstem'_l`i' already specified"
+				exit
+			}
 		}
-		
-		// Create variables for pre and postperiods if surround was selected
+			 
 		if "`surround'" == "surround" {
-			`capture' gen `varstem'_pre = (`myevent' < -`leftperiods')
-			label variable `varstem'_pre "t--"
-			
-			`capture' gen `varstem'_post = (`myevent' > `periods')
-			label variable `varstem'_post "t++"
+			foreach type in pre post {
+				capture confirm variable `varstem'_`type'
+				
+				if _rc {
+					local period_dummies_required "TRUE"
+				}
+				else if "`force'" == ""{
+					di "{err}Variable `varstem'_`type' already specified"
+					exit
+				}
+			}
 		}
 		
-		qui drop `myevent'
-	}
+		if "`period_dummies_required'" == "TRUE" {
+			if "`maxperiods'" == "" { // Use heuristic to determine nr of leads and lags if user did not specify
+				// Compute the absolute maximum number of leads and lags that we could need
+				tempvar counts maxcounts
+				
+				bys `bys': gen `counts' 	= _n
+				by `bys' : egen `maxcounts' = max(`counts')
+				
+				qui su `maxcounts'
+				
+				local maxperiods = r(max)
+				
+				drop `counts' `maxcounts'
+			}
+			
+			// Construct periods to/from event ---------------------------------------------------------------
+			tsperiods , bys(`bys') datevar(`datevar') maxperiods(`maxperiods') ///
+				periods(1) event(`varstem') `mevents' name(myevent) `overlaploc'
+			// Construct periods to/from event ---------------------------------------------------------------	
+			
+			// Prevent STATA from storing myevent variable 
+			tempvar myevent
+			qui gen `myevent' = myevent
+			qui drop myevent
+				
+			forvalues i = 1(1)`leftperiods' {
+				cap gen `varstem'_f`i' = (`myevent' == -`i')
+				label variable `varstem'_f`i' "t-`i'"
+			}
+			
+			forvalues i = 1(1)`periods' {
+				cap gen `varstem'_l`i' = (`myevent' == `i')
+				label variable `varstem'_l`i' "t+`i'"
+			}
+			
+			// Create variables for pre and postperiods if surround was selected
+			if "`surround'" == "surround" {
+				cap gen `varstem'_pre = (`myevent' < -`leftperiods')
+				label variable `varstem'_pre "t--"
+				
+				cap gen `varstem'_post = (`myevent' > `periods')
+				label variable `varstem'_post "t++"
+			}
+			
+			qui drop `myevent'
+		}
+	} // END GENERATE LEADS AND LAGS
 	
 	// Include control for overlap if user specified it
 	if "`overlap'" != "" {
@@ -275,4 +352,5 @@ version 14
 	if "`file'" != "" {
 		graph2 , file("`file'") `debug'
 	}
+	*----------------------- Generate variables----------------------------------
 end

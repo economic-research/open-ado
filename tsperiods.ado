@@ -6,6 +6,23 @@ program define tsperiods , rclass
 		maxperiods(string) mevents name(string) overlap(string) symmetric]
 	
 	*** I Checks
+	// Check that eventnr and overlap variables do not exist in database
+	capture confirm variable eventnr
+	
+	if !_rc {
+		di "{err}Please drop variable 'eventnr'. tsperiods uses this variable to store the nr. of period."
+		exit
+	}
+	
+	// If user specified overlap, check that variable doesn't exist yet
+	if "`overlap'" != "" {
+		capture confirm variable overlap
+		if !_rc {
+			di "{err}Please drop variable 'overlap' or omit option 'overlap' from command."
+			exit
+		}
+	}
+	
 	// Check that user provided a valid panel
 	tempvar nvals
 	bys `bys' `datevar': gen `nvals' = _n

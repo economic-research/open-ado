@@ -10,9 +10,9 @@ help for {hi:evstudy}
 {cmdab:varstem:(}{it:string}{cmd:)} 
 [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
 {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:file:(}{it:string}{cmd:)} {cmdab:force} {cmdab:generate} {cmdab:kernel} 
-{cmdab:kopts:(}{it:string}{cmd:)} {cmdab:leftperiods:(}{it:integer}{cmd:)} {cmdab:mevents} {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} 
-{cmdab:overlap:(}{it:integer}{cmd:)}
-{cmdab:qui} (cmdab:regopts:(}{it:string}{cmd:)} {cmdab:surround} {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:twopts:(}{it:string}{cmd:)}]
+{cmdab:kopts:(}{it:string}{cmd:)} {cmdab:leftperiods:(}{it:integer}{cmd:)} {cmdab:maxperiods:(}{it:integer}{cmd:)} {cmdab:mevents} 
+{cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)}
+{cmdab:qui} {cmdab:regopts:(}{it:string}{cmd:)} {cmdab:surround} {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:twopts:(}{it:string}{cmd:)}]
  
 {p 4 4 2}
 where
@@ -65,6 +65,10 @@ It generates a sequence of variables of the type: {it:varstem_f`periods',..., va
 
 {p 8 16 2}
 {cmd:lefperiods} optionally specify the number of periods before the event that are considered.
+
+{p 8 16 2}
+{cmd:maxperiods} by default {cmd:evstudy} uses a heuristic to determine how many leads and lags it needs to construct. This process can be computationally intensive. 
+The user can use command {cmd:mexperiods} to tell STATA how many periods to check for.
 
 {p 8 16 2}
 {cmd:mevents} by default {cmd:evstudy} checks if there's a maximum of 1 events per ID. {cmd:mevents} (multiple events) turns off this warning.

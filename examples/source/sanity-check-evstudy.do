@@ -6,25 +6,33 @@
 */
 
 clear all
-set obs 100
 
-forvalues i = 1/100{
-	gen z`i' = rnormal(`i', 1)
+local obs = 1000
+
+set obs `obs'
+
+set seed 6931
+
+gen date	 	= _n
+
+forvalues i = 1/300 {
+	gen z`i'	  		= runiform()
 }
 
-gen id = _n
+reshape long z , i(date) j(id)
 
-reshape long z , i(id) j(time)
+gen event = (date == `obs'/2)
 
-replace time = time - 50
+tsperiods, bys(id) datevar(date) periods(10) event(event) 
 
-gen dd = td(01Jan2000) + time
-format %td dd
+forvalues i = -6(1)12 {
+	replace z = z + `i' if epoch == `i'
+}
 
-drop time
+collapse (mean) z , by(id epoch)
 
-gen event = (dd == td(01Jan2000))
+gen event = (epoch == 0)
 label variable event "t"
 
-evstudy z , basevar(event_f1) bys(id) datevar(dd) debug periods(5) varstem(event) ///
-generate leftperiods(7)
+evstudy z, leftperiods(6) periods(12) varstem(event) bys(id) ///
+datevar(epoch) debug generate basevar(event_f1)
