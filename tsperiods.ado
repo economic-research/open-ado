@@ -9,9 +9,14 @@ program define tsperiods , rclass
 	// Check that eventnr and overlap variables do not exist in database
 	capture confirm variable eventnr
 	
-	if !_rc {
-		di "{err}Please drop variable 'eventnr'. tsperiods uses this variable to store the nr. of period."
-		exit
+	if !_rc { // If 'eventnr' exists and 'mevents' selected, throw exception
+		if "`mevents'" == "mevents" {
+			di "{err}Please drop variable 'eventnr'. tsperiods uses this variable to store the nr. of period."
+			exit
+		}
+		else {
+			di as error "'eventnr' already defined, but not created with this command. Caution is adviced."
+		}
 	}
 	
 	// If user specified overlap, check that variable doesn't exist yet
