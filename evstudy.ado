@@ -12,14 +12,21 @@ version 14
 	// Verify that tsperiods is installed
 	capture findfile tsperiods.ado
 	if "`r(fn)'" == "" {
-		 di as error "user-written package tsperiods needs to be installed first;"
+		 di as error "user-written package 'tsperiods' needs to be installed first;"
 		 exit 498
 	}
 	
-	// Verify that tsperiods is installed
+	// Verify that regsave is installed
 	capture findfile regsave.ado
 	if "`r(fn)'" == "" {
-		 di as error "user-written package regsave needs to be installed first;"
+		 di as error "user-written package 'regsave' needs to be installed first;"
+		 exit 498
+	}
+	
+	// Verify that graph2 is installed
+	capture findfile graph2.ado
+	if "`r(fn)'" == "" {
+		 di as error "user-written package 'graph2' needs to be installed first;"
 		 exit 498
 	}
 	
