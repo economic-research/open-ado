@@ -286,25 +286,40 @@ program define tsperiods , rclass
 		
 		by `bys': gen `diff' = `name' - `name'[_n-1]
 		
-		qui gen `startevent' 		= (`diff' < 0)
+		qui gen `startevent' 		= (`diff' <= 0)
 		by `bys': gen eventnr 		= sum(`startevent')
 		
+		qui replace eventnr 		= eventnr + 1
+		
 		if "`overlap'" != "" { // If user specified an overlap window generate dummy for overlap
-			tempvar startepoch prevmaxepoch epochs2prev_event
 			
-			// Identify starting epoch for each event-ID
-			bys `bys' eventnr: egen `startepoch' 	= min(`name') // start epoch for event-ID
+			// Create a local that contains the list of lags to consider
+			local list_lags ""
+			forvalues lagnum = 1(1)`overlap'{
+				local list_lags "`list_lags' lag`lagnum'"
+			}
+		
+			if `datecount' > 0 { // if user specified an event date, create event dummy
+				tempvar event
+				gen `event' = (`eventdate' == `datevar')
+			}
 			
-			// Identify end epoch of previous event-ID 
-			qui gen `prevmaxepoch' = abs(`startepoch') - 1
+			// Create dummies for event variable
+			tempvar `list_lags'
+			forvalues lagnum = 1(1)`overlap'{
+				by `bys': gen lag`lagnum' = `event'[_n-`lagnum']
+			}
+		
+			// Add dummies together to compute whether there was a nearby event
+			egen overlap = rowtotal(`list_lags')
+			qui replace overlap = (overlap > 0 & `name' <= 0)
 			
-			// Compute number of epochs since last event
-			qui gen `epochs2prev_event' = `prevmaxepoch' + (`name' - `startepoch') + 1
+			drop `list_lags'
 			
-			// Generate indicator variable for overlapping periods
-			qui gen overlap = (`epochs2prev_event' <= `overlap' & eventnr != 0)
+			if `datecount' > 0 {
+				drop `event'
+			}
 			
-			drop `startepoch' `prevmaxepoch' `epochs2prev_event'
 		}
 		
 		drop `diff' `startevent'

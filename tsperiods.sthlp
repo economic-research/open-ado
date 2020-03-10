@@ -43,6 +43,7 @@ where
 
 {p 8 16 2}
 {cmd:overlap} generate dummy if epoch overlap with respect to the previous event. Can only be specified with {cmd:mevents}.
+overlap is equal to one for periods before or at the relevant event if the number of periods between that period and the previous event is less than or equal to the number specified by the user.
 
 {p 8 16 2}
 {cmd:symmetric} by default {cmd:tsperiods} constructs epoch as follows (consider the case of t-0): [0,periods). If symmetric is specified then t-0 is constructed as [-periods/2, periods/2].
