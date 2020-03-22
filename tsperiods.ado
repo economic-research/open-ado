@@ -286,7 +286,13 @@ program define tsperiods , rclass
 		
 		by `bys': gen `diff' = `name' - `name'[_n-1]
 		
-		qui gen `startevent' 		= (`diff' <= 0)
+		if "`periods'" != "1" {
+			qui gen `startevent' 		= (`diff' < 0)
+		}
+		else {
+			qui gen `startevent' 		= (`diff' <= 0)
+		}
+		
 		by `bys': gen eventnr 		= sum(`startevent')
 		
 		qui replace eventnr 		= eventnr + 1
@@ -351,6 +357,21 @@ program define tsperiods , rclass
 			}
 		}
 	}
+	
+	// descriptive stats
+	qui su `name'
+	local mean 	= r(mean)
+	local max  	= r(max)
+	local min	= r(min)
+	
+	di "Descriptive stats for `name', mean: `mean', min: `min', max: `max'"
+	
+	qui su eventnr
+	local mean 	= r(mean)
+	local max  	= r(max)
+	local min	= r(min)
+	
+	di "Descriptive stats for eventnr, mean: `mean', min: `min', max: `max'"
 	
 	drop `datediff' `anyevent'
 	
