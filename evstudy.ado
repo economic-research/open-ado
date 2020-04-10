@@ -78,6 +78,7 @@ version 14
 	}
 	
 	// If user specified overlap, check if user also specified mevents
+	// Verify that overlap is a positive integer
 	if "`overlap'" != "" & "`mevents'" == "" {
 		di "{err}Need to specify 'mevents' if 'overlap' is specified"
 		exit

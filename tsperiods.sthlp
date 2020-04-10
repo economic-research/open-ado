@@ -9,7 +9,7 @@ help for {hi:tsperiods}
 {p 8 16 2}{cmd:tsperiods}
 {cmd:,} 
 {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:datevar:(}{it:var}{cmd:)} {cmdab:periods:(}{it:integer}{cmd:)} 
-[{cmdab:event:(}{it:var}{cmd:)} {cmdab:eventdate:(}{it:var}{cmd:)} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
+[{cmdab:event:(}{it:var}{cmd:)} {cmdab:eventdate:(}{it:var}{cmd:)} {cmd:ignore_panel} {cmd:mevents} {cmdab:maxperiods:(}{it:integer}{cmd:)}
 {cmdab:name:(}{it:string}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)} {cmd:symmetric}]
 
 {cmd:tsperiods} returns a new variabled called {it:epoch}, unless {cmd:name} is specified
@@ -34,6 +34,9 @@ where
 
 {p 8 16 2}
 {cmd:eventdate} a variable with the date of the event. Can only specify either {cmd:event} or {cmd:eventdate}. Can only have 1 {cmd:eventdate} per ID.
+
+{p 8 16 2}
+{cmd:ignore_panel} {cmd:tsperiods} will not check if {cmd:bys} and {cmd:datevar} uniquely identify observations. This option has to be used with {cmd:mevents}.
 
 {p 8 16 2}
 {cmd:mevents} by default {cmd:tsperiods} checks if there's a maximum of 1 events per ID. {cmd:mevents} (multiple events) turns off this warning.
