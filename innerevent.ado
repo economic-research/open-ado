@@ -61,8 +61,12 @@ program define innerevent , rclass
 	// and further than `periods', we want to be able to distinguish
 	// whether the `bys'_`eventnr' x `epoch' corresponds to the window close
 	// to the event or not.
-	tempvar marker
-	qui gen `marker' = (`epoch' == -`leftperiods' | `epoch' == `periods' + 1)
+	tempvar marker nvals
+	
+	bys `bys'_`eventnr' `epoch': gen `nvals' = _n
+	
+	qui gen `marker' = (`epoch' == -`leftperiods' & `nvals' == 1 | ///
+		`epoch' == `periods' + 1 & `nvals' == 1)
 	
 	sort `bys'_`eventnr' `epoch'
 	
@@ -80,6 +84,6 @@ program define innerevent , rclass
 
 	gen inner_`bys'_`eventnr' = `bys'_`eventnr'*10 + inner_`eventnr'
 	
-	drop `marker'
+	drop `marker' `nvals'
 end
 	

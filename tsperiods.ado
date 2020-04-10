@@ -3,8 +3,11 @@ program define tsperiods , rclass
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		maxperiods(string) mevents name(string) ///
+		ignore_panel maxperiods(string) mevents name(string) ///
 		overlap(string) symmetric]
+	
+	// Sort data by ID and date
+	sort `bys' `datevar'
 	
 	*** I Checks
 	// Check that eventnr and overlap variables do not exist in database
@@ -30,13 +33,21 @@ program define tsperiods , rclass
 	}
 	
 	// Check that user provided a valid panel
-	tempvar nvals
-	bys `bys' `datevar': gen `nvals' = _n
-	qui count if `nvals' > 1
-	local counts = r(N)
-	if `counts' > 0 {
-		di "{err}`bys' and `datevar' do not uniquely identify observations"
-		exit
+	if "`ignore_panel'" == "" {	
+		tempvar nvals
+		by `bys' `datevar': gen `nvals' = _n
+		qui count if `nvals' > 1
+		local counts = r(N)
+		if `counts' > 0 {
+			di "{err}`bys' and `datevar' do not uniquely identify observations"
+			exit
+		}
+	}
+	else { // the check of multiple events fails if we are not working with a 'real' panel
+		if "`mevents'" == "" {
+			di "{err}'ignore_panel' requires 'mevents'"
+			exit
+		}
 	}
 	
 	// Verify that periods is a positive integer
@@ -168,22 +179,27 @@ program define tsperiods , rclass
 		
 		qui keep if `event' == 1
 
+		keep `bys' `datevar'
+		
+		if "`ignore_panel'" == "ignore_panel" {
+			duplicates drop `bys' `datevar', force
+		}
+		
 		sort `bys' `datevar'
 		by `bys': gen nvals = _n // identifies order of events within panel ID
 		
-		keep `bys' `datevar' nvals
 		save `count_events'
 		
 		restore
 		
-		qui merge 1:1 `bys' `datevar' using `count_events'  , nogen
+		qui merge m:1 `bys' `datevar' using `count_events'  , nogen
 		
 		qui su nvals
 		local max = r(max)
 
 		local varlist
 		
-		gen `datediff' = .
+		qui gen `datediff' = .
 		
 		forvalues i = 1(1)`max'{
 			tempvar date`i' eventdate`i'
@@ -281,6 +297,22 @@ program define tsperiods , rclass
 	
 	// If mevents was selected compute overlapping windows and generate event-ID indicators
 	if "`mevents'" == "mevents" {
+		// If ignore_panel is selected, assume that ID x datevar do not uniquely
+		// identify observations. We solve this by forcing a 'real' panel
+		// where ID x datevar identifies observations. Then we compute overlapping
+		// windows and event-ID indicators for this panel and merge to original at end.
+		if "`ignore_panel'" == "ignore_panel" {
+		
+			tempfile savepoint
+			save `savepoint'
+			if `datecount' > 0 {
+				local other_keep `eventdate'
+			}
+			
+			keep `bys' `datevar' `name' `other_keep'
+			duplicates drop `bys' `datevar' `name', force
+		}
+		
 		tempvar diff startevent
 		
 		sort `bys' `datevar'
@@ -326,14 +358,17 @@ program define tsperiods , rclass
 			if `datecount' > 0 {
 				drop `event'
 			}
-			
+		}	
+		
+		if "`ignore_panel'" == "ignore_panel" {
+			merge 1:m `bys' `datevar' using `savepoint', nogen
 		}
 		
 		drop `diff' `startevent'
 	}
 	
 	// Generate 'eventnr' variable if 'mevents' was NOT specified,
-	// for those ID's with one event
+	// for those ID's with no event
 	if "`mevents'" == "" {
 		qui gen eventnr = 1 if !missing(`name')
 	}
