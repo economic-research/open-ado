@@ -319,7 +319,7 @@ version 14
 	`qui' reghdfe `varlist' `regressors' `overlapctrl' `if', `abslocal' `cluster' `regopts'
 	
 	// Check if any variables were omitted
-	local numcoef = `periods' + `leftperiods' + 1
+	local numcoef = `periods' + `leftperiods'
 	
 	forvalues i = 1(1)`numcoef'{
 		if !missing(r(label`i')) {

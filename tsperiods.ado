@@ -3,7 +3,8 @@ program define tsperiods , rclass
 	syntax , bys(varlist min=1) datevar(varlist min=1 max=1) ///
 		periods(string) ///
 		[event(varlist min=1 max=1) eventdate(varlist min=1 max=1) ///
-		maxperiods(string) mevents name(string) overlap(string) symmetric]
+		maxperiods(string) mevents name(string) ///
+		overlap(string) symmetric]
 	
 	*** I Checks
 	// Check that eventnr and overlap variables do not exist in database
@@ -111,7 +112,7 @@ program define tsperiods , rclass
 	
 	// Check that there's at most one event per ID if mevents wasn't specified
 	if "`mevents'" == ""{
-
+	
 		tempvar maxdate mindate
 		if `eventcount' > 0{ // If user specified an event
 			tempvar datetemp
@@ -331,6 +332,12 @@ program define tsperiods , rclass
 		drop `diff' `startevent'
 	}
 	
+	// Generate 'eventnr' variable if 'mevents' was NOT specified,
+	// for those ID's with one event
+	if "`mevents'" == "" {
+		qui gen eventnr = 1 if !missing(`name')
+	}
+	
 	// Check that epoch has no missing values and provide guidance as to why that would be the case
 	qui count if missing(`name')
 	local missing_epoch = r(N)
@@ -357,8 +364,9 @@ program define tsperiods , rclass
 			}
 		}
 	}
-	
+		
 	// descriptive stats
+		// For epoch
 	qui su `name'
 	local mean 	= r(mean)
 	local max  	= r(max)
@@ -366,6 +374,7 @@ program define tsperiods , rclass
 	
 	di "Descriptive stats for `name', mean: `mean', min: `min', max: `max'"
 	
+		// For event number
 	qui su eventnr
 	local mean 	= r(mean)
 	local max  	= r(max)
