@@ -2,9 +2,9 @@ program evstudy , rclass
 version 14
 	syntax varlist [if], basevar(string) periods(string) ///
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
-		bys(varlist min=1) cl(varlist min=1) datevar(varlist min=1 max=1) debug ///
+		bys(varlist min=1) cl(varlist min=1) connected datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) ///
-		maxperiods(string) mevents ///
+		maxperiods(string) mevents nolabel ///
 		othervar(varlist min=2 max=2) overlap(string) qui  ///
 		regopts(string) tline(string) surround twopts(string)]
 	
@@ -55,6 +55,12 @@ version 14
 	local clcount = 0
 	foreach var in `cl'{
 		local `clcount++'
+	}
+	
+	// Check that connected and kernel not used together
+	if "`connected'" == "connected" & "`kernel'" == "kernel" {
+		di "{err} 'connected' and 'kernel' cannot both be specified"
+		exit
 	}
 	
 	// Check if datevar is empty
@@ -126,10 +132,24 @@ version 14
 		local cluster "cl(`cl')"
 	}
 	
+	// Optionally connect graph
+	if "`connected'" == "connected" {
+		local connected "recast(connected)"
+	}
+	
 	// Define capture (for use with force option)
 	if "`force'" == "force" & "`generate'" == ""{
 		di "{err}Option force can only be specified with option generate"
 		exit
+	}
+	
+	if "`nolabel'" == "" {
+		// Obtain name of dependant variable
+		local depvar `: word 1 of `varlist''
+		// Store label
+		local label_loc : var label `depvar'
+		
+		local ylabel_loc "ytitle(`label_loc')"
 	}
 	
 	// Define tline if one is specified
@@ -348,13 +368,13 @@ version 14
 			(lpolyci coef `days' if !`post', lcolor(navy) ciplot(rline) `kopts') ///
 			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
 			(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , ///
-			legend(off) `twopts'
+			legend(off) `twopts' `ylabel_loc'
 		
 		restore
 	}
 	else {
 		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) `tlineval' xsize(8) recast(connected) `twopts'
+		graphregion(color(white)) `tlineval' xsize(8) `connected' `twopts' `ylabel_loc'
 	}
 	
 	if "`file'" != "" {

@@ -42,7 +42,7 @@ Save DTA and CSV files with names "auto.dta" and "auto.csv", respectively. Note 
 
 This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
 For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
-This version is as at least as recent as commit: 6ced919f2d7d880c6db3815aeebe834323adf211
+This version is as at least as recent as commit: 3cd38782bb154133078fb2cd597d774dbda1c4e3
 
 {title:Authors}
 
