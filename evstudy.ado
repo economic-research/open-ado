@@ -30,6 +30,13 @@ version 14
 		 exit 498
 	}
 	
+	// Verify that timedummy exists
+	capture findfile timedummy.ado
+	if "`r(fn)'" == "" {
+		 di as error "user-written package 'timedummy' needs to be installed first;"
+		 exit 498
+	}
+	
 	// Verify that no variable called 'myevent' exists
 	if "`generate'" == "generate" {
 		capture confirm variable myevent
@@ -115,6 +122,20 @@ version 14
 			exit
 		}
 	}
+	
+	// Warn user if panel is unbalanced
+	sort `bys' `datevar'
+	tempvar diffdate
+	
+	by `bys': gen `diffdate' = `datevar' - `datevar'[_n-1]
+	qui su `diffdate'
+	local max = r(max)
+	
+	if `max' > 1 {
+	    di as error "Warning: panel might be unbalanced"
+	} 
+	
+	drop `diffdate'
 	
 	*----------------------- Checks ---------------------------------------------
 	
@@ -252,24 +273,8 @@ version 14
 			qui gen `myevent' = myevent
 			qui drop myevent
 				
-			forvalues i = 1(1)`leftperiods' {
-				cap gen `varstem'_f`i' = (`myevent' == -`i')
-				label variable `varstem'_f`i' "t-`i'"
-			}
-			
-			forvalues i = 1(1)`periods' {
-				cap gen `varstem'_l`i' = (`myevent' == `i')
-				label variable `varstem'_l`i' "t+`i'"
-			}
-			
-			// Create variables for pre and postperiods if surround was selected
-			if "`surround'" == "surround" {
-				cap gen `varstem'_pre = (`myevent' < -`leftperiods')
-				label variable `varstem'_pre "t--"
-				
-				cap gen `varstem'_post = (`myevent' > `periods')
-				label variable `varstem'_post "t++"
-			}
+			timedummy, varstem(`varstem') periods(`periods') leftperiods(`leftperiods') ///
+				eventvar(`myevent') `surround'
 			
 			qui drop `myevent'
 		}
