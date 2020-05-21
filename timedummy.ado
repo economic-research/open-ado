@@ -7,7 +7,7 @@ version 14
 				local leftperiods = `periods'
 			}
 			
-			qui gen `varstem' = (`epoch' == 0)
+			cap gen `varstem' = (`epoch' == 0)
 			label variable `varstem' "t"
 			
 			forvalues i = 1(1)`leftperiods' {

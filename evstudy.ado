@@ -274,7 +274,7 @@ version 14
 			qui drop myevent
 				
 			timedummy, varstem(`varstem') periods(`periods') leftperiods(`leftperiods') ///
-				eventvar(`myevent') `surround'
+				epoch(`myevent') `surround'
 			
 			qui drop `myevent'
 		}
@@ -378,8 +378,18 @@ version 14
 		restore
 	}
 	else {
-		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) `tlineval' xsize(8) `connected' `twopts' `ylabel_loc'
+		if "`surround'" == "" {
+			est store evstudy
+			coefplot (evstudy, mcolor(navy) ciopts(color(navy)) ci(90) yline(0, lp(solid) lc(black)) graphregion(color(white)) xsize(8) tline(7.5, lp(solid) lc(red))), ///
+			vertical legend(off) offset(0)  xsize(8) `tlineval' `connected' `twopts' `ylabel_loc' scale(1.1)	
+		}
+		else {
+			est store evstudy
+			coefplot (evstudy, keep(`varstem'_pre) mcolor(navy*0.4) ciopts(color(navy*0.4))) ///
+			(evstudy, drop(`varstem'_pre `varstem'_post) mcolor(navy) ciopts(color(navy)) ci(90) yline(0, lp(solid) lc(black)) graphregion(color(white)) xsize(8) tline(7.5, lp(solid) lc(red))) ///
+			(evstudy, keep(`varstem'_post) mcolor(navy*0.4) ciopts(color(navy*0.4))), ///
+			vertical legend(off) offset(0)  xsize(8) `tlineval' `connected' `twopts' `ylabel_loc' scale(1.1)			
+		}
 	}
 	
 	if "`file'" != "" {
