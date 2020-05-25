@@ -4,7 +4,7 @@ version 14
 		varstem(varlist min=1 max=1)  [absorb(varlist) ///
 		bys(varlist min=1) cl(varlist min=1) connected datevar(varlist min=1 max=1) debug ///
 		file(string) force generate kernel kopts(string) leftperiods(string) ///
-		maxperiods(string) mevents nolabel ///
+		maxperiods(string) mevents nolabel omit_graph ///
 		othervar(varlist min=2 max=2) overlap(string) qui  ///
 		regopts(string) tline(string) surround twopts(string)]
 	
@@ -106,6 +106,12 @@ version 14
 			di "{err}overlap has to be an integer"
 			exit
 		}
+	}
+	
+	// If user specified omit_graph, check that filename is not specified
+	if "`omit_graph'" == "omit_graph" & "`file'" != "" {
+		di "{err}Cannot specify 'file' with option 'omit_graph'"
+		exit
 	}
 	
 	// Warn user that in kernel graphs only time coefficients are plotted
@@ -359,31 +365,32 @@ version 14
 	// Normalize coefficients
 	`qui' nlcom `conditions', post
 	
-	if "`kernel'" == "kernel"{
-		preserve
-		regsave
+	if "`omit_graph'" == "" {
+		if "`kernel'" == "kernel"{
+			preserve
+			regsave
+			
+			tempvar days post
+			qui gen `days' 		= _n
+			qui replace `days' 	= `days' - `periods' - 1
+			
+			qui gen `post' 		= (`days' >= 0)
+			
+			graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
+				(lpolyci coef `days' if !`post', lcolor(navy) ciplot(rline) `kopts') ///
+				(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
+				(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , ///
+				legend(off) `twopts' `ylabel_loc'
+			
+			restore
+		}
+		else {
+			coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
+			graphregion(color(white)) `tlineval' xsize(8) `connected' `twopts' `ylabel_loc'
+		}
 		
-		tempvar days post
-		qui gen `days' 		= _n
-		qui replace `days' 	= `days' - `periods' - 1
-		
-		qui gen `post' 		= (`days' >= 0)
-		
-		graph twoway (scatter coef `days' if !`post', msize(small) graphregion(color(white)) graphregion(lwidth(vthick))) ///
-			(lpolyci coef `days' if !`post', lcolor(navy) ciplot(rline) `kopts') ///
-			(scatter coef `days' if `post', msize(small) color(cranberry*0.5)) ///
-			(lpolyci coef `days' if `post', `tlineval' lcolor(cranberry) ciplot(rline) `kopts') , ///
-			legend(off) `twopts' `ylabel_loc'
-		
-		restore
+		if "`file'" != "" {
+			graph2 , file("`file'") `debug'
+		}
 	}
-	else {
-		coefplot, ci(90) yline(0, lp(solid) lc(black)) vertical xlabel(, angle(vertical)) ///
-		graphregion(color(white)) `tlineval' xsize(8) `connected' `twopts' `ylabel_loc'
-	}
-	
-	if "`file'" != "" {
-		graph2 , file("`file'") `debug'
-	}
-	*----------------------- Generate variables----------------------------------
 end

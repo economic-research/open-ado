@@ -11,7 +11,7 @@ help for {hi:evstudy}
 [{cmdab:absorb:(}{it:varlist}{cmd:)} {cmdab:bys:(}{it:varlist}{cmd:)} {cmdab:cl:(}{it:varlist}{cmd:)}
 {cmdab:connected} {cmdab:datevar:(}{it:varlist}{cmd:)} {cmdab:debug} {cmdab:file:(}{it:string}{cmd:)} {cmdab:force} {cmdab:generate} {cmdab:kernel} 
 {cmdab:kopts:(}{it:string}{cmd:)} {cmdab:leftperiods:(}{it:integer}{cmd:)} {cmdab:maxperiods:(}{it:integer}{cmd:)} {cmdab:mevents}
-{cmdab:nolabel} {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)}
+{cmdab:nolabel} {cmdab:omit_graph} {cmdab:othervar:(}{it:varlist min=2 max=2}{cmd:)} {cmdab:overlap:(}{it:integer}{cmd:)}
 {cmdab:qui} {cmdab:regopts:(}{it:string}{cmd:)} {cmdab:surround} {cmdab:tline:(}{it:numeric}{cmd:)} {cmdab:twopts:(}{it:string}{cmd:)}]
  
 {p 4 4 2}
@@ -78,6 +78,9 @@ The user can use command {cmd:mexperiods} to tell STATA how many periods to chec
 
 {p 8 16 2}
 {cmdab:nolabel} prevent {cmdab:evstudy} from using the label of the dependent variable as ytitle.
+
+{p 8 16 2}
+{cmdab:omit_graph} avoid ploting and storing any graph.
 
 {p 8 16 2}
 {cmd:overlap} generate dummy if epoch overlap with respect to the previous event. Can only be specified with {cmd:mevents}.
