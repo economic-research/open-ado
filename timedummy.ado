@@ -7,25 +7,25 @@ version 14
 				local leftperiods = `periods'
 			}
 			
-			qui gen `varstem' = (`epoch' == 0)
-			label variable `varstem' "t"
+			cap gen `varstem' = (`epoch' == 0)
+			label variable `varstem' "0"
 			
 			forvalues i = 1(1)`leftperiods' {
 				qui gen `varstem'_f`i' = (`epoch' == -`i')
-				label variable `varstem'_f`i' "t-`i'"
+				label variable `varstem'_f`i' "-`i'"
 			}
 			
 			forvalues i = 1(1)`periods' {
 				qui gen `varstem'_l`i' = (`epoch' == `i')
-				label variable `varstem'_l`i' "t+`i'"
+				label variable `varstem'_l`i' "`i'"
 			}
 			
 			// Create variables for pre and postperiods if surround was selected
 			if "`surround'" == "surround" {
 				qui gen `varstem'_pre = (`epoch' < -`leftperiods')
-				label variable `varstem'_pre "t--"
+				label variable `varstem'_pre "pre"
 				
 				qui gen `varstem'_post = (`epoch' > `periods')
-				label variable `varstem'_post "t++"
+				label variable `varstem'_post "post"
 			}
 end

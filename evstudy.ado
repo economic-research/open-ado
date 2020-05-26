@@ -280,7 +280,7 @@ version 14
 			qui drop myevent
 				
 			timedummy, varstem(`varstem') periods(`periods') leftperiods(`leftperiods') ///
-				eventvar(`myevent') `surround'
+				`surround' epoch(`myevent')
 			
 			qui drop `myevent'
 		}
