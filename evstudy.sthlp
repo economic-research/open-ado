@@ -80,7 +80,7 @@ The user can use command {cmd:mexperiods} to tell STATA how many periods to chec
 {cmdab:nolabel} prevent {cmdab:evstudy} from using the label of the dependent variable as ytitle.
 
 {p 8 16 2}
-{cmdab:omit_graph} avoid ploting and storing any graph.
+{cmdab:omit_graph} avoid ploting and storing any graph. evstudy stores the model in the object {it:NL_EVresults}.
 
 {p 8 16 2}
 {cmd:overlap} generate dummy if epoch overlap with respect to the previous event. Can only be specified with {cmd:mevents}.
