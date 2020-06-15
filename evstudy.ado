@@ -364,7 +364,7 @@ version 14
 	
 	// Normalize coefficients
 	`qui' nlcom `conditions', post
-	est store evstudy_results
+	est store NL_EVresults
 	
 	if "`omit_graph'" == "" {
 		if "`kernel'" == "kernel"{
@@ -386,9 +386,9 @@ version 14
 			restore
 		}
 		else {
-			coefplot (evstudy_results, keep(`varstem'_pre) mcolor(dknavy*0.4) (evstudy_results, keep(`varstem'_pre) mcolor(dknavy*0.4) ciopts(color(dknavy*0.4)))) ///
-			(evstudy_results, drop(`varstem'_pre `varstem'_post) mcolor(dknavy) ciopts(color(dknavy))) ///
-			(evstudy_results, keep(`varstem'_post) mcolor(dknavy*0.4) ciopts(color(dknavy*0.4))), ///
+			coefplot (NL_EVresults, keep(`varstem'_pre) mcolor(dknavy*0.4) ciopts(color(dknavy*0.4))) ///
+			(NL_EVresults, drop(`varstem'_pre `varstem'_post) mcolor(dknavy) ciopts(color(dknavy))) ///
+			(NL_EVresults, keep(`varstem'_post) mcolor(dknavy*0.4) ciopts(color(dknavy*0.4))), ///
 			ci(90) legend(off) offset(0) scale(1.1) yline(0, lp(solid) lc(black*0.4%80)) `tlineval' xsize(8) `connected' ///
 			vertical xlabel(, angle(vertical)) graphregion(color(white)) `twopts' `ylabel_loc'
 		}
