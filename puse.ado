@@ -51,21 +51,21 @@ program define puse, rclass
 	local exists = min(`dtaExists', `csvExists', `xlsExists')
 	
 	if `exists' != 0{
-		di "No files found: `filedta'	 `filecsv'	`filexls'"
+		di as error "No files found: `filedta'	 `filecsv'	`filexls'"
 		error 601
 	}
 	
 	// Throw exception if user specifies a file extension, but puse reads a different one.
 	if strpos(`file', ".csv") > 0 & `dtaExists' == 0{
-		di "CSV specified, but puse reads DTA file."
+		di as error "CSV specified, but puse reads DTA file."
 		error 601
 	}
 	else if strpos(`file', ".xls") > 0 & `dtaExists' == 0{
-		di "XLS specified, but puse reads DTA file"
+		di as error "XLS specified, but puse reads DTA file"
 		error 601
 	}
 	else if strpos(`file', ".xls") > 0 & `csvExists' == 0{
-		di "XLS/XLSX specified, but puse reads CSV file"
+		di as error "XLS/XLSX specified, but puse reads CSV file"
 		error 601
 	}
 	
