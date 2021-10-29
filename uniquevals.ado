@@ -1,29 +1,31 @@
 program define uniquevals , rclass
 version 14
 	syntax varlist [if]
-	tempvar condition	
-	
-	if "`if'" != ""{
-		qui gen `condition' = 1 `if'
-		local localif "& `condition' == 1"
-	}
-	
-	local counter = 0
-	
+
+	// Count number of variables
+	local k = 0
 	foreach var in `varlist'{
-		tempvar j
-		bys `var': gen `j' = _n
-		qui count if `j' == 1 `localif'
-		di "`var' has " r(N) " distinct values"
-		drop `j'
-		local ++counter
+		local `k++'
 	}
 	
-	if `counter' >= 2{
-		tempvar j
-		bys `varlist': gen `j' = _n
-		qui count if `j' == 1 `localif'
-		di "The interaction of {`varlist'} has " r(N) " distinct values"
-		drop `j'
+	if `k' > 1 {
+		// Calculate distinct values for interaction
+		preserve
+		cap keep `if'
+		qui duplicates drop `varlist' , force
+		local N_all = _N
+		restore
+		
+		di as error "The interaction of {`varlist'} has " `N_all' " distinct values"
+	}
+	
+	// Calculate distinct values for each variable
+	foreach var in `varlist' {
+		preserve
+		cap keep `if'
+		qui duplicates drop `var', force
+		local N_var = _N
+		di as error "`var' has " `N_var' " distinct values"
+		restore
 	}
 end
