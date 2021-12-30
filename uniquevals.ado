@@ -1,5 +1,4 @@
 program define uniquevals , rclass
-version 14
 	syntax varlist [if]
 
 	// Count number of variables
@@ -8,24 +7,25 @@ version 14
 		local `k++'
 	}
 	
-	if `k' > 1 {
-		// Calculate distinct values for interaction
-		preserve
-		cap keep `if'
-		qui duplicates drop `varlist' , force
-		local N_all = _N
-		restore
+	foreach var in `varlist' {
+		tempvar nvals
+		bys `var': gen `nvals' = _n `if'
 		
-		di as error "The interaction of {`varlist'} has " `N_all' " distinct values"
+		qui count if `nvals' == 1
+		local count = r(N)
+		
+		di as error "`var' has " `count' " distinct values."
+		drop `nvals'
 	}
 	
-	// Calculate distinct values for each variable
-	foreach var in `varlist' {
-		preserve
-		cap keep `if'
-		qui duplicates drop `var', force
-		local N_var = _N
-		di as error "`var' has " `N_var' " distinct values"
-		restore
+	if `k' > 1 {
+		tempvar nvals
+		bys `varlist': gen `nvals' = _n `if'
+		
+		qui count if `nvals' == 1
+		local count = r(N)
+		
+		di as error "`varlist' has " `count' " distinct values."
+		drop `nvals'
 	}
 end
