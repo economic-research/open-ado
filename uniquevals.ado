@@ -1,5 +1,5 @@
 program define uniquevals , rclass
-	syntax varlist [if]
+	syntax varlist [if] [, qui]
 
 	// Count number of variables
 	local k = 0
@@ -14,8 +14,12 @@ program define uniquevals , rclass
 		qui count if `nvals' == 1
 		local count = r(N)
 		
-		di as error "`var' has " `count' " distinct values."
+		if "`qui'" == "" {
+			di as error "`var' has " `count' " distinct values."
+		}
 		drop `nvals'
+		
+		return scalar uniquecounts = `count'
 	}
 	
 	if `k' > 1 {
@@ -25,7 +29,11 @@ program define uniquevals , rclass
 		qui count if `nvals' == 1
 		local count = r(N)
 		
-		di as error "`varlist' has " `count' " distinct values."
+		if "`qui'" == "" {
+			di as error "`varlist' has " `count' " distinct values."
+		}
 		drop `nvals'
+				
+		return scalar uniquecounts = `count'
 	}
 end

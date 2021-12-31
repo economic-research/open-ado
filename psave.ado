@@ -10,7 +10,7 @@ program define psave , rclass
 	}
 	
 	syntax , file(string asis) [clear com csvnone debug eopts(string) ///
-			old(string) preserve]
+			label(string) old(string) preserve]
 	
 	if "`clear'" == "clear"{
 		di "Option clear is ignored in psave"
@@ -37,6 +37,11 @@ program define psave , rclass
 	// Optionally compress to save information
 	if "`com'" == "com"{
 		qui compress
+	}
+	
+	// Optionally label dataset
+	if "`label'" != "" {
+		label data "`label'"
 	}
 	
 	// Save DTA in current format

@@ -1,5 +1,4 @@
 {smcl}
-{* 1 October 2018}{...}
 {hline}
 help for {hi:psave}
 {hline}
@@ -8,7 +7,7 @@ help for {hi:psave}
 
 {p 8 16 2}{cmd:psave}
 {cmd:,} 
-{cmdab:file:(}{it:string}{cmd:)} [{cmdab:com} {cmdab:csvnone} {cmdab:debug} {cmdab:eopts:(}{it:string}{cmd:)} {cmdab:old:(}{it:integer}{cmd:)} {cmdab:preserve}]
+{cmdab:file:(}{it:string}{cmd:)} [{cmdab:com} {cmdab:csvnone} {cmdab:debug} {cmdab:eopts:(}{it:string}{cmd:)} {cmdab:old:(}{it:integer}{cmd:)} {cmdab:label:(}{it:string}{cmd:)} {cmdab:preserve}]
 
 {p 4 4 2}
 where
@@ -27,6 +26,9 @@ where
 
 {p 8 16 2}
 {it:old} saves the dataset in an old STATA format.
+
+{p 8 16 2}
+{it:label} labels DTA file.
 
 {p 8 16 2}
 {it:preserve} avoids clearing local memory.
