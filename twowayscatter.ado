@@ -3,7 +3,7 @@ version 14
 	syntax varlist(min=2 max=3) ///
 	 [ ,  color1(string) color2(string) conditions(string) ///
 		debug file(string) lfit ///
-	    type1(string) type2(string) ncorr singleaxis omit]
+	    type1(string) type2(string) ncorr singleaxis omit twopts(string)]
 	
 	if "`omit'" == "omit"{
 		di "Graph skipped: `file'"
@@ -43,22 +43,22 @@ version 14
 		if "`color1'" != "" & "`color2'" != ""{
 		twoway (`type1' `1' `3' `conditions' , mcolor("`color1'")) ///
 			(`type2' `2' `3' `conditions' , `yaxisval' mcolor("`color2'")) `linegraph' , ///
-			graphregion(color(white)) `corrs'
+			graphregion(color(white)) `corrs' `twopts'
 		}
 		else {
 		twoway (`type1' `1' `3' `conditions') ///
 			(`type2' `2' `3' `conditions'  , `yaxisval') `linegraph' , ///
-			graphregion(color(white)) `corrs'
+			graphregion(color(white)) `corrs' `twopts'
 		}
 	}
 	else if `k' == 2{
 		if "`color1'" != "" {
 		twoway (`type1' `1' `2' `conditions' , mcolor("`color1'")) `linegraph' , ///
-			graphregion(color(white)) `corrs'
+			graphregion(color(white)) `corrs' `twopts'
 		}
 		else {
 		twoway (`type1' `1' `2' `conditions') `linegraph' , ///
-			graphregion(color(white)) `corrs'
+			graphregion(color(white)) `corrs' `twopts'
 		}
 	}
 	

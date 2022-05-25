@@ -10,7 +10,7 @@ help for {hi:twowayscatter}
 [{cmd:,} 
 {cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
 debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)} 
-ncorr singleaxis omit]
+ncorr singleaxis omit {cmdab:twopts(}{it:string}{cmd:)]
 
 {p 4 4 2}
 where
@@ -42,7 +42,14 @@ where
 {p 8 16 2}
 {it:omit} If selected, graph will not be rendered or saved. Useful when one doesn't want to keep producing the same graph across multiple compiles.
 
+{p 8 16 2}
+{it:twopts} Passes valid twoway options.
+
 {title:Author}
 
+This is open source software distributed under the GPL-3 license. Ownership belongs to their respective authors.
+For more documentation, examples and the most up to date code visit {browse "https://github.com/economic-research/open-ado/"}
+This version is as at least as recent as commit: 2992be718fa216ed11f795f7d304b949e3fbe191
+
 {p 4} Andres Jurado {p_end}
-{p 4}jose_jurado_vadillo@brown.edu{p_end}
+{p 4}jose_jurado_vadillo@alumni.brown.edu{p_end}
