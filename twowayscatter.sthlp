@@ -10,7 +10,7 @@ help for {hi:twowayscatter}
 [{cmd:,} 
 {cmdab:color1(}{it:string}{cmd:)} {cmdab:color2(}{it:string}{cmd:)} {cmdab:conditions(}{it:string}{cmd:)}
 debug {cmdab:file(}{it:string}{cmd:)} lfit {cmdab:type1(}{it:string}{cmd:)} {cmdab:type2(}{it:string}{cmd:)} 
-ncorr singleaxis omit {cmdab:twopts(}{it:string}{cmd:)]
+ncorr singleaxis omit {cmdab:twopts(}{it:string}{cmd:)}]
 
 {p 4 4 2}
 where
