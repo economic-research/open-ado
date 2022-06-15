@@ -7,9 +7,14 @@ program define uniquevals , rclass
 		local `k++'
 	}
 	
+	if "`if'" != "" {
+		preserve
+		drop `if'
+	}
+	
 	foreach var in `varlist' {
 		tempvar nvals
-		bys `var': gen `nvals' = _n `if'
+		bys `var': gen `nvals' = _n
 		
 		qui count if `nvals' == 1
 		local count = r(N)
@@ -24,7 +29,7 @@ program define uniquevals , rclass
 	
 	if `k' > 1 {
 		tempvar nvals
-		bys `varlist': gen `nvals' = _n `if'
+		bys `varlist': gen `nvals' = _n
 		
 		qui count if `nvals' == 1
 		local count = r(N)
@@ -36,4 +41,9 @@ program define uniquevals , rclass
 				
 		return scalar uniquecounts = `count'
 	}
+	
+	if "`if'" != "" {
+		restore
+	} 
+	
 end
