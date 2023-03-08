@@ -75,7 +75,7 @@ program define puse, rclass
 	} 
 	else if `csvExists' == 0{ // If no DTA present and CSV exists, read CSV
 		import delimited using "`filecsv'", ///
-		`clear' case(lower) `opts'
+		`clear' `opts'
 	}
 	else if `xlsExists' == 0 { // Otherwise read Excel
 		if "`opts'" == "" & "`clear'" == ""{
