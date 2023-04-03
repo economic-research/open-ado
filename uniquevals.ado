@@ -9,7 +9,7 @@ program define uniquevals , rclass
 	
 	if "`if'" != "" {
 		preserve
-		drop `if'
+		keep `if'
 	}
 	
 	foreach var in `varlist' {
