@@ -4,13 +4,14 @@ version 14
 	
 	local pngfile = `file' + ".png"
 	local pdffile = `file' + ".pdf"
+	local gphfile = `file' + ".gph"
 	
 	graph export "`pngfile'" , replace `options'
 	graph export "`pdffile'" , replace `options'
 	
 	if "`full'" == "full" {
-		graph save "`file'", replace
-		psave, file("`file'") $deb preserve
+		graph save `gphfile', replace
+		psave, file(`file') $deb preserve
 	}
 	
 	if "`debug'" == ""{
